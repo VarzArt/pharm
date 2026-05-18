@@ -1,0 +1,145 @@
+# ⚡ Next.js Universal Starter
+
+Базовый шаблон для **Next.js 16 / React 19 / TypeScript 5**, уже включает TailwindCSS v4, ESLint (flat), Prettier и базовую структуру `/src/app`.
+
+## 🚀 Как начать новый проект
+
+У тебя есть два способа создать проект из этого шаблона — **через GitHub** или **через CLI**.
+Оба способа дают один и тот же результат: чистый Next.js-проект, готовый к работе.
+
+**ВАЖНО**\
+Для корректной работы (git add, git commit и т.д.) нужно добавить созданную тобой папку в безопасные для гита
+
+_доверять всем репам (Рекомендую на локальной машине)_
+
+```
+git config --global --add safe.directory '*'
+```
+
+_доверять конкретной созданной_
+
+```
+git config --global --add safe.directory D:/you_route
+```
+
+---
+
+### 🧩 Вариант 1 — через GitHub UI (официальный способ)
+
+1. Перейди на страницу шаблона \
+   👉 `https://github.com/VarzArt/next-starter` (Но ты же уже здесь😏)
+2. Нажми **Use this template → Create a new repository**
+3. Введи имя нового проекта (например `my-app`)
+4. После создания открой терминал и склонируй репозиторий:
+
+#### Windows PowerShell / CMD
+
+```
+git clone https://github.com/VarzArt/my-app.git
+cd my-app
+npm install
+npm run dev
+```
+
+#### masOS/Linux (bash/zsh)
+
+```
+git clone https://github.com/VarzArt/my-app.git
+cd my-app
+npm install
+npm run dev
+```
+
+💡 После этого проект будет полностью готов к разработке.
+Ты можешь удалить историю коммитов и заново инициализировать git при желании.
+
+---
+
+### 🧩 Вариант 2 — через CLI (npx degit)
+
+degit
+— это лёгкая утилита, которая копирует репозиторий без git-истории.
+Идеально подходит для старта проектов из шаблонов — ты получаешь чистую папку без чужих коммитов.
+
+1. **Установка degit (один раз)**
+
+```
+npm install -g degit
+```
+
+2. **Создание проекта из шаблона**
+
+```
+npx degit VarzArt/next-starter my-app
+cd my-app
+npm install
+npm run dev
+```
+
+✅ Теперь у тебя есть чистая копия шаблона с новым именем проекта и без .git-папки.\
+Хочешь сразу инициализировать git?
+
+```
+git init
+git add .
+git commit -m "init"
+```
+
+## 🧩 Технологии
+
+- Next.js 16 (App Router)
+- React 19
+- TypeScript 5+
+- TailwindCSS v4
+- ESLint 9 (flat) + Prettier + Tailwind plugin
+- Готовый алиас @/\*
+- API-роут /api/health
+- Универсальный next.config.ts
+
+## ⚙️ Команды
+
+| Команда           | Описание                  |
+| ----------------- | ------------------------- |
+| npm run dev       | Запуск dev-сервера        |
+| npm run build     | Сборка проекта            |
+| npm run start     | Запуск собранного билда   |
+| npm run lint      | Проверка ESLint           |
+| npm run format    | Форматирование Prettier   |
+| npm run typecheck | Проверка типов TypeScript |
+
+## 📁 Структура проекта
+
+```
+src/
+  app/
+    api/
+      health/route.ts
+    globals.css
+    layout.tsx
+    page.tsx
+  components/
+  lib/
+.vscode/
+.next/
+public/
+```
+
+## 🧱 Особенности
+
+- Современный **App Router** и структура `/src`
+- Полностью типизированный конфиг TypeScript
+- TailwindCSS 4 с автоматической сортировкой классов
+- ESLint (flat) + Prettier с поддержкой форматирования при сохранении
+- Готовая структура компонентов и библиотек
+- Базовый Health API-роут `/api/health`
+- Полная совместимость с Docker и Vercel
+- Универсальный шаблон для будущих проектов — бери и создавай
+
+## 💬 Заключение
+
+Теперь у тебя есть надёжный фундамент, на котором можно строить любые проекты —
+от простых лендингов до крупных приложений с бэком и мобильной сборкой 🚀
+
+> 💙 Удачи в разработке и пусть `npm run dev` всегда запускается с первой попытки!
+
+— _Создано с вниманием к деталям и любовью к чистому коду._
