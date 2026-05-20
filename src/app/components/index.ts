@@ -1,0 +1,5 @@
+export * from './heroSection'
+export * from './benefitSection'
+export * from './cartModal'
+export * from './catalogSection'
+export * from './whyChoseSection'
