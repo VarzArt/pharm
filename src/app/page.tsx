@@ -1,8 +1,15 @@
+import BenefitsSection from '@/app/components/benefitSection'
+import CatalogSection from '@/app/components/catalogSection'
+import HeroSection from '@/app/components/heroSection'
+import WhyChooseSection from '@/app/components/whyChoseSection'
+
 export default function HomePage() {
   return (
-    <main className="mx-auto max-w-3xl p-6">
-      <h1 className="text-2xl font-semibold">Hello Next</h1>
-      <p className="mt-2 text-neutral-600">Болванка проекта готова.</p>
+    <main className="flex w-full flex-col items-center gap-2 pt-[72px]">
+      <HeroSection></HeroSection>
+      <BenefitsSection></BenefitsSection>
+      <CatalogSection></CatalogSection>
+      <WhyChooseSection></WhyChooseSection>
     </main>
-  );
+  )
 }
