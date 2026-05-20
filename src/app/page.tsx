@@ -5,7 +5,7 @@ import WhyChooseSection from '@/app/components/whyChoseSection'
 
 export default function HomePage() {
   return (
-    <main className="flex w-full flex-col items-center gap-2 pt-[72px]">
+    <main className="flex w-full flex-col items-center gap-2">
       <HeroSection></HeroSection>
       <BenefitsSection></BenefitsSection>
       <CatalogSection></CatalogSection>

@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { ArrowUp, ShoppingBag } from 'lucide-react'
+import { useState } from 'react'
+import { ShoppingBag } from 'lucide-react'
 import styles from './Header.module.scss'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
@@ -18,25 +18,10 @@ type HeaderProps = {
 export default function Header({ className }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
-  const [showScrollTop, setShowScrollTop] = useState(false)
 
   const cartQuantity = useCartStore((state) =>
     state.items.reduce((sum, item) => sum + item.quantity, 0),
   )
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 120)
-    }
-
-    handleScroll()
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
 
   const handleNavigate = (sectionId: string) => {
     setIsOpen(false)
@@ -51,13 +36,6 @@ export default function Header({ className }: HeaderProps) {
         })
       }
     }, 320)
-  }
-
-  const handleScrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    })
   }
 
   return (
@@ -76,22 +54,11 @@ export default function Header({ className }: HeaderProps) {
           {cartQuantity > 0 && <span className={styles.main__cartCount}>{cartQuantity}</span>}
         </button>
 
-        {showScrollTop ? (
-          <button
-            type="button"
-            className={styles.main__scrollTop}
-            onClick={handleScrollToTop}
-            aria-label="Наверх"
-          >
-            <ArrowUp size={22} strokeWidth={2} />
-          </button>
-        ) : (
-          <BurgerButton
-            isOpen={isOpen}
-            onClick={() => setIsOpen(!isOpen)}
-            className={styles.main__burger}
-          />
-        )}
+        <BurgerButton
+          isOpen={isOpen}
+          onClick={() => setIsOpen(!isOpen)}
+          className={styles.main__burger}
+        />
       </div>
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} className={styles.main__modal}>

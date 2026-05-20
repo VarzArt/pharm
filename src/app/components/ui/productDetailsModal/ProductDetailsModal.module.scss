@@ -5,10 +5,10 @@
 
   position: fixed;
   inset: 0;
-
-  width: auto;
-  height: 100dvh;
   z-index: 2000;
+
+  width: 100%;
+  height: 100dvh;
 
   overflow: hidden;
 
@@ -31,24 +31,13 @@
 
   width: 100%;
   height: 100dvh;
-
   max-width: none;
 
   border: none;
   outline: none;
   box-shadow: none;
 
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
-  }
+  overflow: hidden;
 
   background: #f5f5f3;
 
@@ -78,10 +67,25 @@
     -webkit-backdrop-filter: blur(8px);
   }
 
+  &__scroll {
+    height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding-bottom: 104px;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+  }
+
   &__imageWrap {
     position: relative;
-
-    background: #e7e7e4;
 
     width: 100%;
     height: 42vh;
@@ -91,6 +95,7 @@
     padding: 0;
 
     overflow: hidden;
+    background: #e7e7e4;
   }
 
   &__image {
@@ -113,7 +118,7 @@
     z-index: 2;
 
     margin-top: -26px;
-    padding: 28px 20px 118px;
+    padding: 28px 20px 32px;
 
     border-radius: 28px 28px 0 0;
 
@@ -122,20 +127,6 @@
     box-shadow:
       0 -18px 48px rgba(0, 0, 0, 0.055),
       inset 0 1px 0 rgba(255, 255, 255, 0.8);
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -2px;
-      right: -2px;
-      height: 32px;
-
-      border-radius: 30px 30px 0 0;
-      background: #f8f8f6;
-
-      z-index: -1;
-    }
   }
 
   &__head {
@@ -256,7 +247,7 @@
 
     ol {
       margin: 0;
-      //   padding-left: 22px;
+      padding-left: 20px;
     }
 
     li {
@@ -304,7 +295,26 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.14);
 
       cursor: pointer;
+
+      &:disabled {
+        cursor: default;
+        opacity: 0.78;
+      }
     }
+  }
+
+  &__loader {
+    width: 18px;
+    height: 18px;
+
+    display: block;
+    margin: 0 auto;
+
+    border: 2px solid rgba(247, 247, 244, 0.35);
+    border-top-color: #f7f7f4;
+    border-radius: 50%;
+
+    animation: spin 0.7s linear infinite;
   }
 }
 
@@ -353,29 +363,6 @@
   to {
     opacity: 0;
     transform: translate3d(0, 14px, 0);
-  }
-}
-
-.modal {
-  &__loader {
-    width: 18px;
-    height: 18px;
-
-    display: block;
-    margin: 0 auto;
-
-    border: 2px solid rgba(247, 247, 244, 0.35);
-    border-top-color: #f7f7f4;
-    border-radius: 50%;
-
-    animation: spin 0.7s linear infinite;
-  }
-
-  &__action {
-    button:disabled {
-      cursor: default;
-      opacity: 0.78;
-    }
   }
 }
 
