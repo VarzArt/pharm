@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { type FormEvent, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
-import { products } from '@/app/data/products'
+import { products, promoCodes } from '@/app/data/products'
 import toast from 'react-hot-toast'
 import type { ContactMethod, OrderFormData } from '@/app/types/cart'
 import styles from './CartModal.module.scss'
@@ -23,6 +23,9 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
   const [isMounted, setIsMounted] = useState(isOpen)
   const [isClosing, setIsClosing] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const [promoValue, setPromoValue] = useState('')
+  const [appliedPromo, setAppliedPromo] = useState<(typeof promoCodes)[number] | null>(null)
 
   const [formData, setFormData] = useState<OrderFormData>({
     name: '',
@@ -96,11 +99,51 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     return sum + item.total
   }, 0)
 
+  const discountAmount = appliedPromo
+    ? Math.round((totalPrice * appliedPromo.discountPercent) / 100)
+    : 0
+
+  const finalPrice = totalPrice - discountAmount
+
   const totalQuantity = cartItems.reduce((sum, item) => {
     if (!item) return sum
 
     return sum + item.quantity
   }, 0)
+
+  const handleApplyPromo = () => {
+    const normalizedPromoValue = promoValue.trim().toUpperCase()
+
+    if (!normalizedPromoValue) {
+      toast.error('Введите промокод')
+      return
+    }
+
+    const foundPromo = promoCodes.find((promo) => promo.code.toUpperCase() === normalizedPromoValue)
+
+    if (!foundPromo) {
+      setAppliedPromo(null)
+      toast.error('Промокод не найден')
+      return
+    }
+
+    setAppliedPromo(foundPromo)
+    setPromoValue(foundPromo.code)
+
+    toast.success(`Промокод применён: скидка ${foundPromo.discountPercent}%`)
+  }
+
+  const handleResetCartState = () => {
+    clearCart()
+    setPromoValue('')
+    setAppliedPromo(null)
+    setFormData({
+      name: '',
+      phone: '',
+      contactMethod: 'telegram',
+      socialLink: '',
+    })
+  }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -111,6 +154,13 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
 
     const order = {
       customer: formData,
+      promo: appliedPromo
+        ? {
+            code: appliedPromo.code,
+            discountPercent: appliedPromo.discountPercent,
+            discountAmount,
+          }
+        : null,
       items: cartItems.map((item) => {
         if (!item) return null
 
@@ -125,6 +175,7 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
         }
       }),
       totalPrice,
+      finalPrice,
       totalQuantity,
     }
 
@@ -134,14 +185,7 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
 
     toast.success('Заказ успешно оформлен. Скоро с вами свяжется менеджер')
 
-    clearCart()
-
-    setFormData({
-      name: '',
-      phone: '',
-      contactMethod: 'telegram',
-      socialLink: '',
-    })
+    handleResetCartState()
 
     setIsSubmitting(false)
     handleClose()
@@ -152,6 +196,51 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
       ...prev,
       [field]: value,
     }))
+  }
+
+  const formatPhone = (value: string) => {
+    let digits = value.replace(/\D/g, '')
+
+    if (!digits) return ''
+
+    if (digits.startsWith('8')) {
+      digits = `7${digits.slice(1)}`
+    }
+
+    if (digits.startsWith('7')) {
+      digits = digits.slice(1)
+    }
+
+    digits = digits.slice(0, 10)
+
+    const code = digits.slice(0, 3)
+    const first = digits.slice(3, 6)
+    const second = digits.slice(6, 8)
+    const third = digits.slice(8, 10)
+
+    let result = '+7'
+
+    if (code) result += ` (${code}`
+    if (code.length === 3) result += ')'
+    if (first) result += ` ${first}`
+    if (second) result += `-${second}`
+    if (third) result += `-${third}`
+
+    return result
+  }
+
+  const getPhoneDigits = (value: string) => {
+    let digits = value.replace(/\D/g, '')
+
+    if (digits.startsWith('8')) {
+      digits = `7${digits.slice(1)}`
+    }
+
+    if (digits.startsWith('7')) {
+      digits = digits.slice(1)
+    }
+
+    return digits.slice(0, 10)
   }
 
   if (!isMounted) return null
@@ -245,20 +334,55 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
               })}
             </div>
 
-            <button type="button" className={styles.cart__clear} onClick={clearCart}>
+            <button type="button" className={styles.cart__clear} onClick={handleResetCartState}>
               Очистить корзину
             </button>
 
+            <div className={styles.cart__promo}>
+              <label>
+                <span>Промокод</span>
+
+                <div className={styles.cart__promoRow}>
+                  <input
+                    type="text"
+                    value={promoValue}
+                    onChange={(event) => {
+                      setPromoValue(event.target.value)
+                    }}
+                    placeholder="Введите промокод"
+                  />
+
+                  <button type="button" onClick={handleApplyPromo}>
+                    Применить
+                  </button>
+                </div>
+              </label>
+
+              {appliedPromo && <p>Скидка {appliedPromo.discountPercent}% применена</p>}
+            </div>
+
             <div className={styles.cart__summary}>
               <span>Итого</span>
-              <strong>{totalPrice.toLocaleString('ru-RU')} ₽</strong>
+
+              <div className={styles.cart__summaryPrice}>
+                {appliedPromo && <del>{totalPrice.toLocaleString('ru-RU')} ₽</del>}
+
+                <strong>{finalPrice.toLocaleString('ru-RU')} ₽</strong>
+              </div>
+            </div>
+
+            <div className={styles.cart__notice}>
+              <p>
+                * Итоговая стоимость и детали заказа подтверждаются менеджером после обработки
+                заявки.
+              </p>
             </div>
 
             <form className={styles.cart__form} onSubmit={handleSubmit}>
               <h3>Оформление заказа</h3>
 
               <label>
-                <span>Имя</span>
+                <span>Имя*</span>
                 <input
                   type="text"
                   value={formData.name}
@@ -269,18 +393,47 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
               </label>
 
               <label>
-                <span>Номер телефона</span>
+                <span>Номер телефона*</span>
                 <input
                   type="tel"
                   value={formData.phone}
-                  onChange={(event) => handleChange('phone', event.target.value)}
-                  placeholder="+7 999 999-99-99"
+                  onChange={(event) => {
+                    handleChange('phone', formatPhone(event.target.value))
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key !== 'Backspace') return
+
+                    const input = event.currentTarget
+                    const cursorPosition = input.selectionStart ?? 0
+
+                    const charBeforeCursor = formData.phone[cursorPosition - 1]
+
+                    const isFormattingChar =
+                      charBeforeCursor === '(' ||
+                      charBeforeCursor === ')' ||
+                      charBeforeCursor === ' ' ||
+                      charBeforeCursor === '-'
+
+                    if (!isFormattingChar) return
+
+                    event.preventDefault()
+
+                    const digits = getPhoneDigits(formData.phone)
+
+                    if (!digits.length) {
+                      handleChange('phone', '')
+                      return
+                    }
+
+                    handleChange('phone', formatPhone(digits.slice(0, -1)))
+                  }}
+                  placeholder="+7 (999) 999-99-99"
                   required
                 />
               </label>
 
               <label>
-                <span>Предпочтительный способ связи</span>
+                <span>Предпочтительный способ связи*</span>
                 <select
                   value={formData.contactMethod}
                   onChange={(event) =>
@@ -288,9 +441,8 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                   }
                 >
                   <option value="telegram">Telegram</option>
-                  <option value="max">Max</option>
+                  <option value="max">MAX</option>
                   <option value="vk">ВК</option>
-                  <option value="whatsapp">WhatsApp</option>
                 </select>
               </label>
 
@@ -301,7 +453,6 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                   value={formData.socialLink}
                   onChange={(event) => handleChange('socialLink', event.target.value)}
                   placeholder="@username или ссылка"
-                  required
                 />
               </label>
 

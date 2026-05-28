@@ -1,8 +1,21 @@
+'use client'
+
 import Image from 'next/image'
 import logo from '@/app/assets/images/logo_main.png'
 import styles from './Footer.module.scss'
 
 export default function Footer() {
+  const handleNavigate = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  }
+
   return (
     <footer className={styles.footer} id="contacts">
       <div className={styles.footer__notice}>
@@ -32,17 +45,17 @@ export default function Footer() {
 
             <ul>
               <li>
-                <a href="#about">О нас</a>
+                <button onClick={() => handleNavigate('about')}>О нас</button>
               </li>
 
               <li>
-                <a href="#catalog">Каталог</a>
+                <button onClick={() => handleNavigate('catalog')}>Каталог</button>
               </li>
               <li>
-                <a href="benefits">Почему мы</a>
+                <button onClick={() => handleNavigate('benefits')}>Почему мы</button>
               </li>
               <li>
-                <a href="contacts">Контакты</a>
+                <button onClick={() => handleNavigate('contacts')}>Контакты</button>
               </li>
             </ul>
           </nav>

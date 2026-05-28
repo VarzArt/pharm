@@ -149,14 +149,26 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
               <p>{product.description}</p>
 
               <div>
-                <h3>Состав:</h3>
+                <h3>Основные эффекты:</h3>
 
-                <ol>
-                  {product.composition.map((item) => (
-                    <li key={item}>{item}</li>
+                <ul>
+                  {product.mainEffects.map((effect) => (
+                    <li key={effect}>{effect}</li>
                   ))}
-                </ol>
+                </ul>
               </div>
+
+              {!!product.composition?.length && (
+                <div>
+                  <h3>Состав:</h3>
+
+                  <ul>
+                    {product.composition.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ import BenefitsSection from '@/app/components/benefitSection'
 import CatalogSection from '@/app/components/catalogSection'
 import HeroSection from '@/app/components/heroSection'
 import WhyChooseSection from '@/app/components/whyChoseSection'
+import ScrollTopButton from '@/app/components/ui/scrollTopButton'
 
 export default function HomePage() {
   return (
@@ -10,6 +11,7 @@ export default function HomePage() {
       <BenefitsSection></BenefitsSection>
       <CatalogSection></CatalogSection>
       <WhyChooseSection></WhyChooseSection>
+      <ScrollTopButton></ScrollTopButton>
     </main>
   )
 }
