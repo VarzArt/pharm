@@ -11,21 +11,35 @@ const INITIAL_LIMIT = 6
 const LOAD_MORE_STEP = 3
 
 export default function CatalogPage() {
-  const [activeCategory, setActiveCategory] = useState<'all' | ProductCategory>('all')
+  const [activeCategories, setActiveCategories] = useState<ProductCategory[]>([])
   const [visibleCount, setVisibleCount] = useState(INITIAL_LIMIT)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   const filteredProducts = useMemo(() => {
-    if (activeCategory === 'all') return products
+    if (activeCategories.length === 0) return products
 
-    return products.filter((product) => product.category === activeCategory)
-  }, [activeCategory])
+    return products.filter((product) =>
+      activeCategories.every((category) => product.categories.includes(category)),
+    )
+  }, [activeCategories])
 
   const visibleProducts = filteredProducts.slice(0, visibleCount)
 
-  const handleCategoryChange = (category: 'all' | ProductCategory) => {
-    setActiveCategory(category)
+  const handleCategoryChange = (categoryId: 'all' | ProductCategory) => {
     setVisibleCount(INITIAL_LIMIT)
+
+    if (categoryId === 'all') {
+      setActiveCategories([])
+      return
+    }
+
+    setActiveCategories((prev) => {
+      if (prev.includes(categoryId)) {
+        return prev.filter((category) => category !== categoryId)
+      }
+
+      return [...prev, categoryId]
+    })
   }
 
   const remainingCount = filteredProducts.length - visibleProducts.length
@@ -43,25 +57,37 @@ export default function CatalogPage() {
         </div>
 
         <div className={styles.catalog__chips}>
-          {productCategories.map((category) => (
-            <button
-              key={category.id}
-              type="button"
-              className={
-                activeCategory === category.id ? styles.catalog__chipActive : styles.catalog__chip
-              }
-              onClick={() => handleCategoryChange(category.id)}
-            >
-              {category.label}
-            </button>
-          ))}
+          {productCategories.map((category) => {
+            const isActive =
+              category.id === 'all'
+                ? activeCategories.length === 0
+                : activeCategories.includes(category.id)
+
+            return (
+              <button
+                key={category.id}
+                type="button"
+                className={isActive ? styles.catalog__chipActive : styles.catalog__chip}
+                onClick={() => handleCategoryChange(category.id)}
+              >
+                {category.label}
+              </button>
+            )
+          })}
         </div>
 
-        <section className={styles.catalog__grid}>
-          {visibleProducts.map((product) => (
-            <ProductCard key={product.id} product={product} onClick={setSelectedProduct} />
-          ))}
-        </section>
+        {visibleProducts.length > 0 ? (
+          <section className={styles.catalog__grid}>
+            {visibleProducts.map((product) => (
+              <ProductCard key={product.id} product={product} onClick={setSelectedProduct} />
+            ))}
+          </section>
+        ) : (
+          <div className={styles.catalog__empty}>
+            <h3>Товары не найдены</h3>
+            <p>Нет препаратов, которые подходят под все выбранные категории.</p>
+          </div>
+        )}
 
         {remainingCount > 0 && (
           <button

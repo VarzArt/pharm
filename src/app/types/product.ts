@@ -1,4 +1,9 @@
-export type ProductCategory = 'joints' | 'weight-loss' | 'anti-age'
+export type ProductCategory =
+  | 'energy-recovery'
+  | 'joints'
+  | 'anti-age'
+  | 'weight-control'
+  | 'beauty-health'
 
 export type ProductCategoryOption = {
   id: 'all' | ProductCategory
@@ -18,9 +23,10 @@ export type Product = {
   title: string
   subtitle: string
   image: string
-  category: ProductCategory
-  description: string
-  composition: string[]
-  variants: ProductVariant[]
+  categories: ProductCategory[]
   isAvailable: boolean
+  description: string
+  mainEffects: string[]
+  composition?: string[]
+  variants: ProductVariant[]
 }
