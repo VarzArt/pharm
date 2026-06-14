@@ -66,42 +66,44 @@ export default function BenefitsSection() {
 
   return (
     <section className={styles.benefits}>
-      <p className={styles.benefits__label}>Каталог</p>
-      <h2 className={styles.benefits__title}>Наши преимущества</h2>
+      <div className={styles.benefits__inner}>
+        <p className={styles.benefits__label}>Почему мы</p>
+        <h2 className={styles.benefits__title}>Наши преимущества</h2>
 
-      <div ref={sliderRef} className={styles.benefits__slider} onScroll={handleScroll}>
-        {Array.from({ length: pagesCount }).map((_, pageIndex) => (
-          <div className={styles.benefits__page} key={pageIndex}>
-            {benefits
-              .slice(pageIndex * PAGE_SIZE, pageIndex * PAGE_SIZE + PAGE_SIZE)
-              .map((item) => {
-                const Icon = item.icon
+        <div ref={sliderRef} className={styles.benefits__slider} onScroll={handleScroll}>
+          {Array.from({ length: pagesCount }).map((_, pageIndex) => (
+            <div className={styles.benefits__page} key={pageIndex}>
+              {benefits
+                .slice(pageIndex * PAGE_SIZE, pageIndex * PAGE_SIZE + PAGE_SIZE)
+                .map((item) => {
+                  const Icon = item.icon
 
-                return (
-                  <article className={styles.benefits__card} key={item.title}>
-                    <div className={styles.benefits__icon}>
-                      <Icon size={28} strokeWidth={1.8} />
-                    </div>
+                  return (
+                    <article className={styles.benefits__card} key={item.title}>
+                      <div className={styles.benefits__icon}>
+                        <Icon size={28} strokeWidth={1.8} />
+                      </div>
 
-                    <h3>{item.title}</h3>
-                    <p>{item.text}</p>
-                  </article>
-                )
-              })}
-          </div>
-        ))}
-      </div>
+                      <h3>{item.title}</h3>
+                      <p>{item.text}</p>
+                    </article>
+                  )
+                })}
+            </div>
+          ))}
+        </div>
 
-      <div className={styles.benefits__pagination}>
-        {Array.from({ length: pagesCount }).map((_, index) => (
-          <button
-            key={index}
-            type="button"
-            onClick={() => scrollToPage(index)}
-            className={index === activePage ? styles.active : ''}
-            aria-label={`Перейти к слайду ${index + 1}`}
-          />
-        ))}
+        <div className={styles.benefits__pagination}>
+          {Array.from({ length: pagesCount }).map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => scrollToPage(index)}
+              className={index === activePage ? styles.active : ''}
+              aria-label={`Перейти к слайду ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   )

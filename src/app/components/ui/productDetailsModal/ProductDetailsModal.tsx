@@ -1,10 +1,12 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { createPortal } from 'react-dom'
-import type { Product, ProductVariant } from '@/app/types/product'
+import { ChevronLeft } from 'lucide-react'
+import { products } from '@/app/data/products'
+import type { Product } from '@/app/types/product'
 import { useCartStore } from '@/app/store/cartStore'
 import styles from './ProductDetailsModal.module.scss'
 
@@ -19,11 +21,20 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
   const [isMounted, setIsMounted] = useState(Boolean(product))
   const [isClosing, setIsClosing] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
-    product?.variants[0] ?? null,
-  )
+  const [currentProduct, setCurrentProduct] = useState<Product | null>(product)
+  const [history, setHistory] = useState<Product[]>([])
 
   const addItem = useCartStore((state) => state.addItem)
+
+  const currentVariant = currentProduct?.variants[0] ?? null
+
+  const relatedProducts = useMemo(() => {
+    if (!currentProduct) return []
+
+    return currentProduct.relatedProductIds
+      .map((id) => products.find((product) => product.id === id))
+      .filter(Boolean) as Product[]
+  }, [currentProduct])
 
   const handleClose = () => {
     setIsClosing(true)
@@ -31,15 +42,37 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
     window.setTimeout(() => {
       setIsMounted(false)
       setIsClosing(false)
+      setCurrentProduct(null)
+      setHistory([])
       onClose()
     }, ANIMATION_DURATION)
+  }
+
+  const handleOpenRelatedProduct = (nextProduct: Product) => {
+    if (!currentProduct) return
+
+    setHistory((prev) => [...prev, currentProduct])
+    setCurrentProduct(nextProduct)
+  }
+
+  const handleBack = () => {
+    setHistory((prev) => {
+      const parentProduct = prev.at(-1)
+
+      if (parentProduct) {
+        setCurrentProduct(parentProduct)
+      }
+
+      return prev.slice(0, -1)
+    })
   }
 
   useEffect(() => {
     if (product) {
       setIsMounted(true)
       setIsClosing(false)
-      setSelectedVariant(product.variants[0])
+      setCurrentProduct(product)
+      setHistory([])
     }
   }, [product])
 
@@ -68,19 +101,19 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
   }, [isMounted])
 
   const handleAddToCart = async () => {
-    if (isAdding || !product || !selectedVariant) return
+    if (isAdding || !currentProduct || !currentVariant) return
 
     setIsAdding(true)
 
     await new Promise((resolve) => setTimeout(resolve, 550))
 
-    addItem(product.id, selectedVariant.id)
+    addItem(currentProduct.id, currentVariant.id)
 
     toast.success('Товар добавлен в корзину')
     setIsAdding(false)
   }
 
-  if (!isMounted || !product || !selectedVariant) return null
+  if (!isMounted || !currentProduct || !currentVariant) return null
 
   return createPortal(
     <div
@@ -88,12 +121,23 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
       onClick={handleClose}
       role="dialog"
       aria-modal="true"
-      aria-label={product.title}
+      aria-label={currentProduct.title}
     >
       <article
         className={`${styles.modal} ${isClosing ? styles.modalClosing : ''}`}
         onClick={(event) => event.stopPropagation()}
       >
+        {history.length > 0 && (
+          <button
+            className={styles.modal__back}
+            type="button"
+            onClick={handleBack}
+            aria-label="Вернуться к предыдущему товару"
+          >
+            <ChevronLeft size={22} strokeWidth={2} />
+          </button>
+        )}
+
         <button
           className={styles.modal__close}
           onClick={handleClose}
@@ -106,8 +150,8 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
         <div className={styles.modal__scroll}>
           <div className={styles.modal__imageWrap}>
             <Image
-              src={product.image}
-              alt={product.title}
+              src={currentProduct.image}
+              alt={currentProduct.title}
               width={640}
               height={460}
               className={styles.modal__image}
@@ -118,52 +162,69 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
           <div className={styles.modal__body}>
             <div className={styles.modal__head}>
               <div>
-                <h2>{product.title}</h2>
-                <p>{product.subtitle}</p>
-                <span>{selectedVariant.dosage}</span>
+                <h2>{currentProduct.title}</h2>
+                <p>{currentProduct.subtitle}</p>
+                <span>{currentVariant.dosage}</span>
               </div>
 
-              <strong>{selectedVariant.price.toLocaleString('ru-RU')} ₽</strong>
+              <strong>{currentVariant.price.toLocaleString('ru-RU')} ₽</strong>
             </div>
 
-            <div className={styles.modal__variants}>
-              {product.variants.map((variant) => (
-                <button
-                  key={variant.id}
-                  type="button"
-                  className={
-                    selectedVariant.id === variant.id
-                      ? styles.modal__variantActive
-                      : styles.modal__variant
-                  }
-                  onClick={() => setSelectedVariant(variant)}
-                >
-                  {variant.label}
-                </button>
-              ))}
-            </div>
+            {relatedProducts.length > 0 && (
+              <div className={styles.modal__related}>
+                <h3>Часто берут с</h3>
+
+                <div className={styles.modal__relatedList}>
+                  {relatedProducts.map((relatedProduct) => {
+                    const variant = relatedProduct.variants[0]
+
+                    return (
+                      <button
+                        key={relatedProduct.id}
+                        type="button"
+                        className={styles.modal__relatedCard}
+                        onClick={() => handleOpenRelatedProduct(relatedProduct)}
+                      >
+                        <Image
+                          src={relatedProduct.image}
+                          alt={relatedProduct.title}
+                          width={72}
+                          height={72}
+                          className={styles.modal__relatedImage}
+                        />
+
+                        <span>
+                          <b>{relatedProduct.title}</b>
+                          <small>{variant.dosage}</small>
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
 
             <div className={styles.modal__divider} />
 
             <div className={styles.modal__content}>
-              <p>{product.description}</p>
+              <p>{currentProduct.description}</p>
 
               <div>
                 <h3>Основные эффекты:</h3>
 
                 <ul>
-                  {product.mainEffects.map((effect) => (
+                  {currentProduct.mainEffects.map((effect) => (
                     <li key={effect}>{effect}</li>
                   ))}
                 </ul>
               </div>
 
-              {!!product.composition?.length && (
+              {!!currentProduct.composition?.length && (
                 <div>
                   <h3>Состав:</h3>
 
                   <ul>
-                    {product.composition.map((item) => (
+                    {currentProduct.composition.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
                   </ul>

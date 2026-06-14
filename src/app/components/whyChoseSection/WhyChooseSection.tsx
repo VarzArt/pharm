@@ -65,40 +65,42 @@ export default function WhyChooseSection() {
 
   return (
     <section className={styles.why} id="benefits">
-      <p className={styles.why__label}>Преимущества</p>
-      <h2 className={styles.why__title}>Почему нас выбирают</h2>
+      <div className={styles.why__inner}>
+        <p className={styles.why__label}>Преимущества</p>
+        <h2 className={styles.why__title}>Почему нас выбирают</h2>
 
-      <div ref={sliderRef} className={styles.why__slider} onScroll={handleScroll}>
-        {Array.from({ length: pagesCount }).map((_, pageIndex) => (
-          <div className={styles.why__page} key={pageIndex}>
-            {items.slice(pageIndex * PAGE_SIZE, pageIndex * PAGE_SIZE + PAGE_SIZE).map((item) => {
-              const Icon = item.icon
+        <div ref={sliderRef} className={styles.why__slider} onScroll={handleScroll}>
+          {Array.from({ length: pagesCount }).map((_, pageIndex) => (
+            <div className={styles.why__page} key={pageIndex}>
+              {items.slice(pageIndex * PAGE_SIZE, pageIndex * PAGE_SIZE + PAGE_SIZE).map((item) => {
+                const Icon = item.icon
 
-              return (
-                <article className={styles.why__card} key={item.title}>
-                  <div className={styles.why__icon}>
-                    <Icon size={28} strokeWidth={1.7} />
-                  </div>
+                return (
+                  <article className={styles.why__card} key={item.title}>
+                    <div className={styles.why__icon}>
+                      <Icon size={28} strokeWidth={1.7} />
+                    </div>
 
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
-                </article>
-              )
-            })}
-          </div>
-        ))}
-      </div>
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
+                  </article>
+                )
+              })}
+            </div>
+          ))}
+        </div>
 
-      <div className={styles.why__pagination}>
-        {Array.from({ length: pagesCount }).map((_, index) => (
-          <button
-            key={index}
-            type="button"
-            className={index === activePage ? styles.active : ''}
-            onClick={() => scrollToPage(index)}
-            aria-label={`Перейти к слайду ${index + 1}`}
-          />
-        ))}
+        <div className={styles.why__pagination}>
+          {Array.from({ length: pagesCount }).map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              className={index === activePage ? styles.active : ''}
+              onClick={() => scrollToPage(index)}
+              aria-label={`Перейти к слайду ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   )

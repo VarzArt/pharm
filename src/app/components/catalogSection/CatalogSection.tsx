@@ -19,7 +19,7 @@ export default function CatalogPage() {
     if (activeCategories.length === 0) return products
 
     return products.filter((product) =>
-      activeCategories.every((category) => product.categories.includes(category)),
+      product.categories.some((category) => activeCategories.includes(category)),
     )
   }, [activeCategories])
 
@@ -47,57 +47,59 @@ export default function CatalogPage() {
   return (
     <>
       <main className={styles.catalog} id="catalog">
-        <div className={styles.catalog__head}>
-          <div>
-            <p className={styles.catalog__label}>Каталог</p>
-            <h1 className={styles.catalog__title}>Наша продукция</h1>
+        <div className={styles.catalog__inner}>
+          <div className={styles.catalog__head}>
+            <div>
+              <p className={styles.catalog__label}>Каталог</p>
+              <h1 className={styles.catalog__title}>Наша продукция</h1>
+            </div>
+
+            <span className={styles.catalog__count}>{filteredProducts.length} продуктов</span>
           </div>
 
-          <span className={styles.catalog__count}>{filteredProducts.length} продуктов</span>
-        </div>
+          <div className={styles.catalog__chips}>
+            {productCategories.map((category) => {
+              const isActive =
+                category.id === 'all'
+                  ? activeCategories.length === 0
+                  : activeCategories.includes(category.id)
 
-        <div className={styles.catalog__chips}>
-          {productCategories.map((category) => {
-            const isActive =
-              category.id === 'all'
-                ? activeCategories.length === 0
-                : activeCategories.includes(category.id)
-
-            return (
-              <button
-                key={category.id}
-                type="button"
-                className={isActive ? styles.catalog__chipActive : styles.catalog__chip}
-                onClick={() => handleCategoryChange(category.id)}
-              >
-                {category.label}
-              </button>
-            )
-          })}
-        </div>
-
-        {visibleProducts.length > 0 ? (
-          <section className={styles.catalog__grid}>
-            {visibleProducts.map((product) => (
-              <ProductCard key={product.id} product={product} onClick={setSelectedProduct} />
-            ))}
-          </section>
-        ) : (
-          <div className={styles.catalog__empty}>
-            <h3>Товары не найдены</h3>
-            <p>Нет препаратов, которые подходят под все выбранные категории.</p>
+              return (
+                <button
+                  key={category.id}
+                  type="button"
+                  className={isActive ? styles.catalog__chipActive : styles.catalog__chip}
+                  onClick={() => handleCategoryChange(category.id)}
+                >
+                  {category.label}
+                </button>
+              )
+            })}
           </div>
-        )}
 
-        {remainingCount > 0 && (
-          <button
-            type="button"
-            className={styles.catalog__more}
-            onClick={() => setVisibleCount((count) => count + LOAD_MORE_STEP)}
-          >
-            Показать ещё {Math.min(LOAD_MORE_STEP, remainingCount)} товаров
-          </button>
-        )}
+          {visibleProducts.length > 0 ? (
+            <section className={styles.catalog__grid}>
+              {visibleProducts.map((product) => (
+                <ProductCard key={product.id} product={product} onClick={setSelectedProduct} />
+              ))}
+            </section>
+          ) : (
+            <div className={styles.catalog__empty}>
+              <h3>Товары не найдены</h3>
+              <p>Нет препаратов, которые подходят под выбранные категории.</p>
+            </div>
+          )}
+
+          {remainingCount > 0 && (
+            <button
+              type="button"
+              className={styles.catalog__more}
+              onClick={() => setVisibleCount((count) => count + LOAD_MORE_STEP)}
+            >
+              Показать ещё {Math.min(LOAD_MORE_STEP, remainingCount)} товаров
+            </button>
+          )}
+        </div>
       </main>
 
       <ProductDetailModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />

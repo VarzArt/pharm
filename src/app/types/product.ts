@@ -28,5 +28,6 @@ export type Product = {
   description: string
   mainEffects: string[]
   composition?: string[]
+  relatedProductIds: string[]
   variants: ProductVariant[]
 }

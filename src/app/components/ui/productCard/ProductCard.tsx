@@ -25,7 +25,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
       <div className={styles.card__body}>
         <div>
           <h3>{product.title}</h3>
-          <p>{product.subtitle}</p>
+          {/* <p>{product.subtitle}</p> */}
           <span>{defaultVariant.dosage}</span>
         </div>
 
