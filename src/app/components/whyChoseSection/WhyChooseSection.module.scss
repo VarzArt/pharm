@@ -1,39 +1,55 @@
 .why {
-  padding: 54px 0;
+  position: relative;
+  z-index: 1;
+
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: 38px 0 42px;
+
   background: #f5f5f3;
-  border-radius: 32px;
+  border-radius: 28px;
+
   overflow: visible;
 
+  &__inner {
+    width: 100%;
+    max-width: 1480px;
+    margin: 0 auto;
+  }
+
   &__label {
-    margin: 0 0 12px;
+    margin: 0 0 10px;
     padding: 0 20px;
 
     font-family: var(--font-main), sans-serif;
     font-size: 11px;
     font-weight: 600;
     line-height: 1;
-    letter-spacing: 0.42em;
+    letter-spacing: 0.44em;
     text-align: center;
     text-transform: uppercase;
-    color: #7c7c7c;
+    color: #8a8a8a;
   }
 
   &__title {
-    margin: 0 0 42px;
+    margin: 0 0 28px;
     padding: 0 20px;
 
     font-family: var(--font-main), sans-serif;
-    font-size: 34px;
-    font-weight: 600;
-    line-height: 0.95;
-    letter-spacing: -0.065em;
+    font-size: clamp(34px, 4vw, 56px);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.078em;
     text-align: center;
-    color: #4a4a4a;
+    color: #424242;
+    text-wrap: balance;
   }
 
   &__slider {
     width: 100%;
+
     display: flex;
+
     overflow-x: auto;
     overflow-y: visible;
 
@@ -57,14 +73,14 @@
 
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
+    gap: 14px;
 
-    padding: 10px 18px 20px;
+    padding: 6px 18px 14px;
   }
 
   &__card {
-    min-height: 250px;
-    padding: 26px 14px 24px;
+    min-height: 172px;
+    padding: 18px 12px 16px;
 
     display: flex;
     flex-direction: column;
@@ -72,7 +88,7 @@
     justify-content: flex-start;
 
     border: 1px solid rgba(0, 0, 0, 0.045);
-    border-radius: 28px;
+    border-radius: 22px;
 
     background:
       linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.34)), #efefed;
@@ -83,40 +99,42 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.78);
 
     h3 {
-      margin: 18px 0 8px;
+      margin: 12px 0 6px;
 
       font-family: var(--font-main), sans-serif;
-      font-size: 17px;
-      font-weight: 600;
-      line-height: 1.12;
-      letter-spacing: -0.045em;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.06em;
       text-align: center;
-      color: #4b4b4b;
+      color: #424242;
+      text-wrap: balance;
     }
 
     p {
       margin: 0;
 
       font-family: var(--font-main), sans-serif;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.4;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.32;
       letter-spacing: -0.03em;
       text-align: center;
       color: #707070;
+      text-wrap: balance;
     }
   }
 
   &__icon {
-    width: 56px;
-    height: 56px;
-    margin-bottom: 18px;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 10px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border-radius: 19px;
+    border-radius: 15px;
 
     background:
       radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.96), transparent 34%),
@@ -125,27 +143,27 @@
     color: #666666;
 
     box-shadow:
-      0 16px 32px rgba(0, 0, 0, 0.095),
+      0 10px 22px rgba(0, 0, 0, 0.08),
       inset 0 1px 0 rgba(255, 255, 255, 0.92);
 
     svg {
-      width: 28px;
-      height: 28px;
+      width: 23px;
+      height: 23px;
       stroke: currentColor;
     }
   }
 
   &__pagination {
-    margin-top: 18px;
+    margin-top: 10px;
 
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 9px;
+    gap: 8px;
 
     button {
-      width: 7px;
-      height: 7px;
+      width: 6px;
+      height: 6px;
       padding: 0;
 
       border: none;
@@ -161,7 +179,93 @@
   }
 
   .active {
-    width: 24px !important;
+    width: 22px !important;
     background: #626262 !important;
+  }
+
+  @media (min-width: 768px) {
+    padding: 46px 28px 52px;
+
+    &__slider {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+
+    &__page {
+      display: contents;
+    }
+
+    &__card {
+      min-height: 176px;
+      padding: 20px 16px 18px;
+    }
+
+    &__pagination {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    padding: 48px 32px 56px;
+
+    &__title {
+      margin-bottom: 34px;
+      font-size: clamp(38px, 3.4vw, 64px);
+    }
+
+    &__slider {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    &__card {
+      min-height: 184px;
+      padding: 24px 22px 22px;
+
+      h3 {
+        font-size: 21px;
+      }
+
+      p {
+        max-width: 320px;
+        font-size: 15px;
+        line-height: 1.38;
+      }
+    }
+
+    &__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+
+  @media (min-width: 1600px) {
+    &__inner {
+      max-width: 1560px;
+    }
+
+    &__slider {
+      gap: 22px;
+    }
+
+    &__card {
+      min-height: 190px;
+    }
+  }
+
+  @media (min-width: 2200px) {
+    &__inner {
+      max-width: 1680px;
+    }
   }
 }

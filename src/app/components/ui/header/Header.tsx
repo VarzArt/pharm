@@ -15,6 +15,13 @@ type HeaderProps = {
   className?: string
 }
 
+const navItems = [
+  { label: 'О нас', sectionId: 'about' },
+  { label: 'Каталог', sectionId: 'catalog' },
+  { label: 'Почему мы', sectionId: 'benefits' },
+  { label: 'Контакты', sectionId: 'contacts' },
+]
+
 export default function Header({ className }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
@@ -40,33 +47,48 @@ export default function Header({ className }: HeaderProps) {
 
   return (
     <header className={cn(styles.main, className)}>
-      <Image src={logo} alt="main logo" className={styles.main__logo} />
+      <div className={styles.main__inner}>
+        <Image src={logo} alt="main logo" className={styles.main__logo} />
 
-      <div className={styles.main__actions}>
-        <button
-          type="button"
-          className={styles.main__cart}
-          onClick={() => setIsCartOpen(true)}
-          aria-label="Открыть корзину"
-        >
-          <ShoppingBag size={22} strokeWidth={1.8} />
+        <nav className={styles.main__desktopNav} aria-label="Основная навигация">
+          {navItems.map((item) => (
+            <button
+              key={item.sectionId}
+              type="button"
+              onClick={() => handleNavigate(item.sectionId)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
 
-          {cartQuantity > 0 && <span className={styles.main__cartCount}>{cartQuantity}</span>}
-        </button>
+        <div className={styles.main__actions}>
+          <button
+            type="button"
+            className={styles.main__cart}
+            onClick={() => setIsCartOpen(true)}
+            aria-label="Открыть корзину"
+          >
+            <ShoppingBag size={22} strokeWidth={1.8} />
 
-        <BurgerButton
-          isOpen={isOpen}
-          onClick={() => setIsOpen(!isOpen)}
-          className={styles.main__burger}
-        />
+            {cartQuantity > 0 && <span className={styles.main__cartCount}>{cartQuantity}</span>}
+          </button>
+
+          <BurgerButton
+            isOpen={isOpen}
+            onClick={() => setIsOpen(!isOpen)}
+            className={styles.main__burger}
+          />
+        </div>
       </div>
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} className={styles.main__modal}>
         <ul>
-          <li onClick={() => handleNavigate('about')}>О нас</li>
-          <li onClick={() => handleNavigate('catalog')}>Каталог</li>
-          <li onClick={() => handleNavigate('benefits')}>Почему мы</li>
-          <li onClick={() => handleNavigate('contacts')}>Контакты</li>
+          {navItems.map((item) => (
+            <li key={item.sectionId} onClick={() => handleNavigate(item.sectionId)}>
+              {item.label}
+            </li>
+          ))}
         </ul>
       </Modal>
 

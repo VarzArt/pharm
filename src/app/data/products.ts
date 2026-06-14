@@ -24,6 +24,7 @@ export const products: Product[] = [
     image: '/products/test1.jpg',
     categories: ['beauty-health'],
     isAvailable: true,
+    relatedProductIds: ['glow', 'acetyl-epitalon', 'melanotan-2'],
     description:
       'GHK-Cu — природный трипептид, связанный с ионом меди. Используется в исследовательских целях в контексте восстановления, качества кожи и возрастных изменений.',
     mainEffects: [
@@ -39,6 +40,18 @@ export const products: Product[] = [
         dosage: '100mg',
         price: 9200,
       },
+      {
+        id: 'ghk-cupr-10mg',
+        label: '10mg',
+        dosage: '10mg',
+        price: 9200,
+      },
+      {
+        id: 'ghk-cupr-1000mg',
+        label: '1000mg',
+        dosage: '1000mg',
+        price: 9200,
+      },
     ],
   },
   {
@@ -49,6 +62,7 @@ export const products: Product[] = [
     image: '/products/test2.jpg',
     categories: ['beauty-health'],
     isAvailable: true,
+    relatedProductIds: ['bpc-157', 'tb-500', 'kpv'],
     description:
       'Melanotan 2 — синтетический аналог α-меланоцит-стимулирующего гормона. Используется в исследовательских целях.',
     mainEffects: [
@@ -72,6 +86,7 @@ export const products: Product[] = [
     subtitle: 'Mitochondrial Peptide',
     image: '/products/test3.jpg',
     categories: ['energy-recovery', 'anti-age'],
+    relatedProductIds: ['mots-c', 'kisspeptide', 'kpv'],
     isAvailable: true,
     description:
       'MOTS-c — митохондриальный пептид, кодируемый митохондриальной ДНК. Изучается в контексте энергетического обмена и метаболического здоровья.',
@@ -98,6 +113,7 @@ export const products: Product[] = [
     image: '/products/test3.jpg',
     categories: ['joints'],
     isAvailable: true,
+    relatedProductIds: ['retatrutide', 'tirzepatide', 'mots-c'],
     description:
       'BPC-157 — синтетический пентадекапептид, производный от белка желудочного сока. Используется в исследовательских целях.',
     mainEffects: [
@@ -123,6 +139,7 @@ export const products: Product[] = [
     image: '/products/test2.jpg',
     categories: ['joints'],
     isAvailable: true,
+    relatedProductIds: ['ghk-cupr', 'glow', 'acetyl-epitalon'],
     description:
       'TB-500 — синтетическая версия фрагмента тимозина бета-4. Применяется в исследовательских целях.',
     mainEffects: [
@@ -148,6 +165,7 @@ export const products: Product[] = [
     image: '/products/test1.jpg',
     categories: ['weight-control'],
     isAvailable: true,
+    relatedProductIds: ['glow', 'acetyl-epitalon', 'melanotan-2'],
     description:
       'Retatrutide — тройной агонист рецепторов GLP-1, GIP и глюкагона. Изучается в контексте контроля веса и метаболических процессов.',
     mainEffects: [
@@ -176,6 +194,7 @@ export const products: Product[] = [
     description:
       'Glow — комплексная смесь для исследовательских задач, связанных с восстановлением, качеством кожи и снижением воспалительных процессов.',
     composition: ['GHK-Cu — 50mg', 'TB-500 — 10mg', 'BPC-157 — 10mg', 'KPV — 10mg'],
+    relatedProductIds: ['bpc-157', 'tb-500', 'kpv'],
     mainEffects: [
       'GHK-Cu — качество кожи, коллаген, anti-age направление.',
       'TB-500 — подвижность клеток и восстановительные процессы.',
@@ -200,6 +219,7 @@ export const products: Product[] = [
     image: '/products/test2.jpg',
     categories: ['anti-age', 'beauty-health'],
     isAvailable: true,
+    relatedProductIds: ['mots-c', 'kisspeptide', 'kpv'],
     description:
       'Ас-Эпиталон — ацетилированная версия эпиталона, тетрапептида, изучаемого в контексте клеточного старения и циркадных ритмов.',
     mainEffects: [
@@ -225,6 +245,7 @@ export const products: Product[] = [
     image: '/products/test3.jpg',
     categories: ['energy-recovery', 'beauty-health'],
     isAvailable: true,
+    relatedProductIds: ['retatrutide', 'tirzepatide', 'mots-c'],
     description:
       'Kisspeptide-10 — короткий нейропептид, изучаемый как регулятор гипоталамо-гипофизарно-гонадной оси.',
     mainEffects: [
@@ -250,6 +271,7 @@ export const products: Product[] = [
     image: '/products/test1.jpg',
     categories: ['weight-control'],
     isAvailable: true,
+    relatedProductIds: ['ghk-cupr', 'glow', 'acetyl-epitalon'],
     description:
       'Тирзепатид — двойной агонист рецепторов GLP-1 и GIP. Изучается в контексте контроля веса и метаболического здоровья.',
     mainEffects: [
@@ -275,6 +297,7 @@ export const products: Product[] = [
     image: '/products/test2.jpg',
     categories: ['energy-recovery', 'joints'],
     isAvailable: true,
+    relatedProductIds: ['glow', 'acetyl-epitalon', 'melanotan-2'],
     description:
       'KPV — трипептид, C-терминальный фрагмент α-MSH. Изучается в контексте воспалительных процессов, кожи и слизистых.',
     mainEffects: [
@@ -293,3 +316,6 @@ export const products: Product[] = [
     ],
   },
 ]
+
+//TODO: 2. Сделать команду в бота для сортировки по промокодам
+//TODO: 6. Поменять фотографии (Основные + товарные)
