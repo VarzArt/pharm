@@ -24,6 +24,7 @@ const navItems = [
 
 export default function Header({ className }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false)
+  //   const [isOpenCalc, setIsOpenCalc] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
 
   const cartQuantity = useCartStore((state) =>
@@ -73,11 +74,20 @@ export default function Header({ className }: HeaderProps) {
 
             {cartQuantity > 0 && <span className={styles.main__cartCount}>{cartQuantity}</span>}
           </button>
+          {/* 
+          <button
+            type="button"
+            // className={styles.main__cart}
+            onClick={() => setIsOpenCalc(true)}
+            aria-label="Открыть корзину"
+          >
+            <ShoppingBag size={22} strokeWidth={1.8} />
+          </button> */}
 
           <BurgerButton
             isOpen={isOpen}
             onClick={() => setIsOpen(!isOpen)}
-            className={styles.main__burger}
+            className={cn(styles.main__burger, isOpen && styles.main__burgerOpen)}
           />
         </div>
       </div>
@@ -91,6 +101,10 @@ export default function Header({ className }: HeaderProps) {
           ))}
         </ul>
       </Modal>
+      {/* 
+      <Modal isOpen={isOpenCalc} onClose={() => setIsOpenCalc(false)}>
+          <PeptideCalculator></PeptideCalculator>
+      </Modal> */}
 
       <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </header>
