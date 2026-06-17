@@ -3,6 +3,7 @@
 import { type ReactNode, useEffect, useState } from 'react'
 import styles from './Modal.module.scss'
 import { cn } from '@/lib/utils'
+import { createPortal } from 'react-dom'
 
 interface ModalProps {
   isOpen: boolean
@@ -44,10 +45,12 @@ export default function Modal({ isOpen, onClose, children, title, className }: M
     }
 
     document.addEventListener('keydown', handleKeyDown)
+    document.documentElement.style.overflow = 'hidden'
     document.body.style.overflow = 'hidden'
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
+      document.documentElement.style.overflow = ''
       document.body.style.overflow = ''
     }
   }, [isMounted])
@@ -73,7 +76,7 @@ export default function Modal({ isOpen, onClose, children, title, className }: M
     }
   }
 
-  return (
+  return createPortal(
     <div
       className={cn(styles.overlay, isClosing && styles.overlayClosing, className)}
       onClick={handleOverlayClick}
@@ -86,6 +89,7 @@ export default function Modal({ isOpen, onClose, children, title, className }: M
 
         <div className={styles.content}>{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
