@@ -23,10 +23,14 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
   const [isAdding, setIsAdding] = useState(false)
   const [currentProduct, setCurrentProduct] = useState<Product | null>(product)
   const [history, setHistory] = useState<Product[]>([])
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null)
 
   const addItem = useCartStore((state) => state.addItem)
 
-  const currentVariant = currentProduct?.variants[0] ?? null
+  const currentVariant =
+    currentProduct?.variants.find((variant) => variant.id === selectedVariantId) ??
+    currentProduct?.variants[0] ??
+    null
 
   const relatedProducts = useMemo(() => {
     if (!currentProduct) return []
@@ -53,6 +57,7 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
 
     setHistory((prev) => [...prev, currentProduct])
     setCurrentProduct(nextProduct)
+    setSelectedVariantId(nextProduct.variants[0]?.id ?? null)
   }
 
   const handleBack = () => {
@@ -61,6 +66,7 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
 
       if (parentProduct) {
         setCurrentProduct(parentProduct)
+        setSelectedVariantId(parentProduct.variants[0]?.id ?? null)
       }
 
       return prev.slice(0, -1)
@@ -73,6 +79,7 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
       setIsClosing(false)
       setCurrentProduct(product)
       setHistory([])
+      setSelectedVariantId(product.variants[0]?.id ?? null)
     }
   }, [product])
 
@@ -164,7 +171,22 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
               <div>
                 <h2>{currentProduct.title}</h2>
                 <p>{currentProduct.subtitle}</p>
-                <span>{currentVariant.dosage}</span>
+                {currentProduct.variants.length > 1 && (
+                  <div className={styles.modal__variants}>
+                    {currentProduct.variants.map((variant) => (
+                      <button
+                        key={variant.id}
+                        type="button"
+                        className={`${styles.modal__variant} ${
+                          currentVariant?.id === variant.id ? styles.modal__variantActive : ''
+                        }`}
+                        onClick={() => setSelectedVariantId(variant.id)}
+                      >
+                        {variant.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <strong>{currentVariant.price.toLocaleString('ru-RU')} ₽</strong>
