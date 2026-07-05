@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ShoppingBag } from 'lucide-react'
+import { Calculator, ShoppingBag } from 'lucide-react'
 import styles from './Header.module.scss'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
@@ -10,6 +10,7 @@ import BurgerButton from '@/app/components/ui/burgerButton'
 import Modal from '@/app/components/ui/modal'
 import CartModal from '@/app/components/cartModal'
 import { useCartStore } from '@/app/store/cartStore'
+import PeptideCalculatorModal from '@/app/components/ui/peptideCalculator/peptideCalculator'
 
 type HeaderProps = {
   className?: string
@@ -24,7 +25,7 @@ const navItems = [
 
 export default function Header({ className }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false)
-  //   const [isOpenCalc, setIsOpenCalc] = useState(false)
+  const [isOpenCalc, setIsOpenCalc] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
 
   const cartQuantity = useCartStore((state) =>
@@ -69,20 +70,22 @@ export default function Header({ className }: HeaderProps) {
             className={styles.main__cart}
             onClick={() => setIsCartOpen(true)}
             aria-label="Открыть корзину"
+            disabled={isCartOpen ?? isOpenCalc}
           >
             <ShoppingBag size={22} strokeWidth={1.8} />
 
             {cartQuantity > 0 && <span className={styles.main__cartCount}>{cartQuantity}</span>}
           </button>
-          {/* 
+
           <button
             type="button"
-            // className={styles.main__cart}
+            className={styles.main__cart}
             onClick={() => setIsOpenCalc(true)}
-            aria-label="Открыть корзину"
+            aria-label="Открыть калькулятор"
+            disabled={isCartOpen || isOpenCalc}
           >
-            <ShoppingBag size={22} strokeWidth={1.8} />
-          </button> */}
+            <Calculator size={22} strokeWidth={1.8} />
+          </button>
 
           <BurgerButton
             isOpen={isOpen}
@@ -101,11 +104,11 @@ export default function Header({ className }: HeaderProps) {
           ))}
         </ul>
       </Modal>
-      {/* 
-      <Modal isOpen={isOpenCalc} onClose={() => setIsOpenCalc(false)}>
-          <PeptideCalculator></PeptideCalculator>
-      </Modal> */}
 
+      <PeptideCalculatorModal
+        isOpen={isOpenCalc}
+        onClose={() => setIsOpenCalc((prev) => !prev)}
+      ></PeptideCalculatorModal>
       <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </header>
   )

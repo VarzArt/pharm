@@ -32,6 +32,8 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
     currentProduct?.variants[0] ??
     null
 
+  const currentImage = currentVariant?.image ?? currentProduct?.image ?? ''
+
   const relatedProducts = useMemo(() => {
     if (!currentProduct) return []
 
@@ -157,7 +159,7 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
         <div className={styles.modal__scroll}>
           <div className={styles.modal__imageWrap}>
             <Image
-              src={currentProduct.image}
+              src={currentImage}
               alt={currentProduct.title}
               width={640}
               height={460}
@@ -208,7 +210,7 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
                         onClick={() => handleOpenRelatedProduct(relatedProduct)}
                       >
                         <Image
-                          src={relatedProduct.image}
+                          src={variant.image ?? relatedProduct.image}
                           alt={relatedProduct.title}
                           width={72}
                           height={72}

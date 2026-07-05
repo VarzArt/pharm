@@ -2,7 +2,7 @@
 
 import styles from './HeroSection.module.scss'
 import Image from 'next/image'
-import productImage from '@/app/assets/images/prosuctImage.png'
+import productImage from '@/app/assets/images/main.png'
 
 export default function HeroSection() {
   const handleNavigate = (sectionId: string) => {
