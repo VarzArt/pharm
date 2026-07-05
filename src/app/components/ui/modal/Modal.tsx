@@ -78,7 +78,7 @@ export default function Modal({ isOpen, onClose, children, title, className }: M
 
   return createPortal(
     <div
-      className={cn(styles.overlay, isClosing && styles.overlayClosing, className)}
+      className={cn(styles.overlay, isClosing && styles.overlayClosing)}
       onClick={handleOverlayClick}
       role="dialog"
       aria-modal="true"
@@ -87,7 +87,7 @@ export default function Modal({ isOpen, onClose, children, title, className }: M
       <div className={cn(styles.modal, isClosing && styles.modalClosing)}>
         {title && <h2 className={styles.title}>{title}</h2>}
 
-        <div className={styles.content}>{children}</div>
+        <div className={cn(styles.content, className)}>{children}</div>
       </div>
     </div>,
     document.body,

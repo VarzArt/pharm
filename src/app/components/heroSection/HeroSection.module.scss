@@ -76,22 +76,21 @@
   &__imageWrap {
     margin: 38px 0 42px;
 
-    border-radius: 30px;
     overflow: hidden;
 
-    background: #e7e7e4;
-
-    box-shadow:
-      0 30px 76px rgba(0, 0, 0, 0.09),
-      0 8px 24px rgba(0, 0, 0, 0.045),
-      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    @media (min-width: 1024px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   &__image {
+    border-radius: 30px;
     display: block;
-    width: 100%;
+    width: max-content;
     height: auto;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   &__subtitle {

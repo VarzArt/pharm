@@ -15,6 +15,7 @@ export type ProductVariant = {
   label: string
   dosage: string
   price: number
+  image?: string
 }
 
 export type Product = {
