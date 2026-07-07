@@ -10,47 +10,11 @@ export const productCategories: ProductCategoryOption[] = [
 ]
 
 export const promoCodes = [
-  { code: 'XYMERA10', discountPercent: 10 },
-  { code: 'PEPTIDE15', discountPercent: 15 },
-  { code: 'START20', discountPercent: 20 },
+  { code: 'Somova', discountPercent: 10 },
+  { code: 'Lerafit', discountPercent: 10 },
 ]
 
 export const products: Product[] = [
-  {
-    id: 'ghk-cupr',
-    slug: 'ghk-cupr',
-    title: 'GHK-CUPR',
-    subtitle: 'Copper Peptide Complex',
-    image: '/peptides/ghkCUP.jpeg',
-    categories: ['beauty-health'],
-    isAvailable: true,
-    relatedProductIds: ['acetyl-epitalon', 'melanotan-2'],
-    description:
-      'GHK-Cu - это природный трипептид (глицил-L-гистидил-L-лизин), связанный с ионом меди (Cu²⁺). Он естественным образом присутствует в плазме крови человека, но уровень снижается с возрастом.',
-    mainEffects: [
-      'Стимулирует синтез коллагена, эластина и гликозаминогликанов;',
-      'Ускоряет заживление ран, регенерацию тканей (кожа, лёгкие, печень, желудок);',
-      'Обладает антиоксидантным, противовоспалительным и антиканцерогенным действием;',
-      'Модулирует экспрессию более 4000 генов, улучшает ангиогенез (рост сосудов), защищает клетки;',
-      'Полезен для кожи (анти-эйдж, упругость, уменьшение морщин), роста волос и общего восстановления.',
-    ],
-    variants: [
-      {
-        id: 'ghk-cupr-100mg/vial',
-        label: '100mg/1vial',
-        dosage: '100mg/vial',
-        price: 6500,
-        image: '/peptides/ghkCUP.jpeg',
-      },
-      {
-        id: 'ghk-cupr-100mg/3ml',
-        label: '100mg/3ml',
-        dosage: '100mg/3ml',
-        price: 8000,
-        image: '/peptides/ghkCUPPEN.jpeg',
-      },
-    ],
-  },
   {
     id: 'melanotan-2',
     slug: 'melanotan-2',
@@ -163,7 +127,7 @@ export const products: Product[] = [
   {
     id: 'retatrutide',
     slug: 'retatrutide',
-    title: 'Reta',
+    title: 'Retatrutide',
     subtitle: 'Retatrutide',
     image: '/peptides/retatrutide.jpeg',
     categories: ['weight-control'],
@@ -231,7 +195,7 @@ export const products: Product[] = [
   {
     id: 'acetyl-epitalon',
     slug: 'acetyl-epitalon',
-    title: 'Ас-Эпиталон',
+    title: 'Ac-Epitanol',
     subtitle: 'Acetyl Epitalon',
     image: '/peptides/epitano.jpeg',
     categories: ['anti-age', 'beauty-health'],
@@ -282,7 +246,7 @@ export const products: Product[] = [
   {
     id: 'tirzepatide',
     slug: 'tirzepatide',
-    title: 'Тирзепатид',
+    title: 'Tirzepatide',
     subtitle: 'Tirzepatide',
     image: '/peptides/tizepat.jpeg',
     categories: ['weight-control'],
@@ -301,6 +265,41 @@ export const products: Product[] = [
         label: '10mg',
         dosage: '10mg',
         price: 7000,
+      },
+    ],
+  },
+  {
+    id: 'ghk-cupr',
+    slug: 'ghk-cupr',
+    title: 'GHK-CUPR',
+    subtitle: 'Copper Peptide Complex',
+    image: '/peptides/ghkCUP.jpeg',
+    categories: ['beauty-health'],
+    isAvailable: true,
+    relatedProductIds: ['acetyl-epitalon', 'melanotan-2'],
+    description:
+      'GHK-Cu - это природный трипептид (глицил-L-гистидил-L-лизин), связанный с ионом меди (Cu²⁺). Он естественным образом присутствует в плазме крови человека, но уровень снижается с возрастом.',
+    mainEffects: [
+      'Стимулирует синтез коллагена, эластина и гликозаминогликанов;',
+      'Ускоряет заживление ран, регенерацию тканей (кожа, лёгкие, печень, желудок);',
+      'Обладает антиоксидантным, противовоспалительным и антиканцерогенным действием;',
+      'Модулирует экспрессию более 4000 генов, улучшает ангиогенез (рост сосудов), защищает клетки;',
+      'Полезен для кожи (анти-эйдж, упругость, уменьшение морщин), роста волос и общего восстановления.',
+    ],
+    variants: [
+      {
+        id: 'ghk-cupr-100mg/vial',
+        label: '100mg/1vial',
+        dosage: '100mg/vial',
+        price: 6500,
+        image: '/peptides/ghkCUP.jpeg',
+      },
+      {
+        id: 'ghk-cupr-100mg/3ml',
+        label: '100mg/3ml',
+        dosage: '100mg/3ml',
+        price: 8000,
+        image: '/peptides/ghkCUPPEN.jpeg',
       },
     ],
   },
