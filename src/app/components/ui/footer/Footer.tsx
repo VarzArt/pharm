@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import logo from '@/app/assets/images/logo_main.png'
 import styles from './Footer.module.scss'
+import Link from 'next/link'
 
 export default function Footer() {
   const handleNavigate = (sectionId: string) => {
@@ -20,18 +21,23 @@ export default function Footer() {
     <footer className={styles.footer} id="contacts">
       <div className={styles.footer__inner}>
         <div className={styles.footer__notice}>
-          <p className={styles.footer__noticeLabel}>Важная информация</p>
-
           <p className={styles.footer__noticeText}>
-            Вся пептидная продукция, представленная на данном сайте, предназначена исключительно для
-            исследовательских и лабораторных целей. Продукция не является лекарственным средством,
-            пищевой добавкой или косметическим продуктом и не предназначена для применения человеком
-            или животным. Вся информация на сайте носит исключительно ознакомительный и
-            образовательный характер.
+            <strong>
+              ВСЕ ПРЕДСТАВЛЕННЫЕ ПРОДУКТЫ НА ЭТОМ САЙТЕ ПРЕДНАЗНАЧЕНЫ ИСКЛЮЧИТЕЛЬНО ДЛЯ
+              ИССЛЕДОВАТЕЛЬСКИХ ЦЕЛЕЙ.
+            </strong>
+            <br></br>Они разработаны для испытаний in vitro и исключительно для лабораторных
+            экспериментов. Вся предоставленная на этом веб-сайте информация имеет исключительно
+            образовательный характер. Любое введение этого продукта в организм человека или
+            животного строго запрещено. Важно, чтобы этим продуктом обращались только
+            лицензированные и квалифицированные специалисты. Этот продукт не предназначен для
+            использования в качестве лекарства, продукта питания или косметического средства. Его не
+            следует ошибочно маркировать, использовать или обозначать как таковой. Его назначение и
+            использование строго ограничены исследованиями и научным расследованием.
           </p>
 
           <a
-            href="https://t.me/your_username"
+            href={'https://t.me/XymeraSupport'}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.footer__noticeLink}
@@ -78,11 +84,31 @@ export default function Footer() {
               <h3>Контакты</h3>
 
               <ul>
-                <li>info@xymera.ru</li>
-                <li>Telegram</li>
-                <li>WhatsApp</li>
+                <li>
+                  <Link href={'mailto:Xymera.peptides@yandex.ru'}>Почта</Link>
+                </li>
+                <li>
+                  <Link
+                    href={'https://t.me/XymeraSupport'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Telegram
+                  </Link>
+                </li>
               </ul>
             </div>
+          </div>
+        </div>
+
+        <div className={styles.footer__law}>
+          <div className={styles.footer__law_docs}>
+            <a href={'/data/PublicOffer.docx'}>Публичная оферта</a>
+            <a href={'/data/PrivacyPolicy.docx'}>Политика конфиденциальности</a>
+          </div>
+          <div className={styles.footer__law_info}>
+            ИНН: 780452496539 <br></br>
+            <br></br>ОГРНИП: 326784700220431
           </div>
         </div>
 

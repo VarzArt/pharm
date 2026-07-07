@@ -6,7 +6,7 @@ import { createPortal } from 'react-dom'
 import { HelpCircle, X } from 'lucide-react'
 import { products, promoCodes } from '@/app/data/products'
 import toast from 'react-hot-toast'
-import type { ContactMethod, OrderFormData } from '@/app/types/cart'
+import type { OrderFormData } from '@/app/types/cart'
 import styles from './CartModal.module.scss'
 import { useCartStore } from '@/app/store/cartStore'
 
@@ -30,7 +30,6 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
   const [formData, setFormData] = useState<OrderFormData>({
     name: '',
     phone: '',
-    contactMethod: 'telegram',
     socialLink: '',
   })
 
@@ -96,21 +95,11 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     return sum + item.total
   }, 0)
 
-  const cartDiscountPercent = (() => {
-    if (totalPrice >= 60000) return 15
-    if (totalPrice >= 40000) return 10
-    if (totalPrice >= 20000) return 5
-    return 0
-  })()
-
-  const cartDiscountAmount = Math.round((totalPrice * cartDiscountPercent) / 100)
-  const priceAfterCartDiscount = totalPrice - cartDiscountAmount
-
   const promoDiscountAmount = appliedPromo
-    ? Math.round((priceAfterCartDiscount * appliedPromo.discountPercent) / 100)
+    ? Math.round((totalPrice * appliedPromo.discountPercent) / 100)
     : 0
 
-  const finalPrice = priceAfterCartDiscount - promoDiscountAmount
+  const finalPrice = totalPrice - promoDiscountAmount
 
   const totalQuantity = cartItems.reduce((sum, item) => {
     if (!item) return sum
@@ -146,7 +135,6 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     setFormData({
       name: '',
       phone: '',
-      contactMethod: 'telegram',
       socialLink: '',
     })
   }
@@ -161,12 +149,6 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     const order = {
       customer: formData,
       discounts: {
-        cart: cartDiscountPercent
-          ? {
-              discountPercent: cartDiscountPercent,
-              discountAmount: cartDiscountAmount,
-            }
-          : null,
         promo: appliedPromo
           ? {
               code: appliedPromo.code,
@@ -389,23 +371,14 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                     </div>
 
                     <div className={styles.cart__summaryPrice}>
-                      {(cartDiscountPercent > 0 || appliedPromo) && (
-                        <del>{totalPrice.toLocaleString('ru-RU')} ₽</del>
-                      )}
+                      {appliedPromo && <del>{totalPrice.toLocaleString('ru-RU')} ₽</del>}
 
                       <strong>{finalPrice.toLocaleString('ru-RU')} ₽</strong>
                     </div>
                   </div>
 
-                  {(cartDiscountPercent > 0 || appliedPromo) && (
+                  {appliedPromo && (
                     <div className={styles.cart__discounts}>
-                      {cartDiscountPercent > 0 && (
-                        <p>
-                          Скидка за сумму заказа: −{cartDiscountPercent}% (
-                          {cartDiscountAmount.toLocaleString('ru-RU')} ₽)
-                        </p>
-                      )}
-
                       {appliedPromo && (
                         <p>
                           Промокод {appliedPromo.code}: −{appliedPromo.discountPercent}% (
@@ -450,26 +423,12 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                 </label>
 
                 <label>
-                  <span>Предпочтительный способ связи*</span>
-                  <select
-                    value={formData.contactMethod}
-                    onChange={(event) =>
-                      handleChange('contactMethod', event.target.value as ContactMethod)
-                    }
-                  >
-                    <option value="telegram">Telegram</option>
-                    <option value="max">MAX</option>
-                    <option value="vk">ВК</option>
-                  </select>
-                </label>
-
-                <label>
-                  <span>Ссылка на соц.сеть</span>
+                  <span>Никнейм в телеграм</span>
                   <input
                     type="text"
                     value={formData.socialLink}
                     onChange={(event) => handleChange('socialLink', event.target.value)}
-                    placeholder="@username или ссылка"
+                    placeholder="@username"
                   />
                 </label>
 
