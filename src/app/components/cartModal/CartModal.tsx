@@ -157,34 +157,48 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
             }
           : null,
       },
-      items: cartItems.map((item) => {
-        if (!item) return null
+      items: cartItems
+        .map((item) => {
+          if (!item) return null
 
-        return {
-          productId: item.product.id,
-          productTitle: item.product.title,
-          variantId: item.variant.id,
-          dosage: item.variant.dosage,
-          price: item.variant.price,
-          quantity: item.quantity,
-          total: item.total,
-        }
-      }),
+          return {
+            productId: item.product.id,
+            productTitle: item.product.title,
+            variantId: item.variant.id,
+            dosage: item.variant.dosage,
+            price: item.variant.price,
+            quantity: item.quantity,
+            total: item.total,
+          }
+        })
+        .filter(Boolean),
       totalPrice,
       finalPrice,
       totalQuantity,
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 900))
+    try {
+      const response = await fetch('/api/order/telegram', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(order),
+      })
 
-    console.log('ORDER:', order)
+      if (!response.ok) {
+        throw new Error('Telegram sending failed')
+      }
 
-    toast.success('Заказ успешно оформлен. Скоро с вами свяжется менеджер')
+      toast.success('Заказ успешно оформлен. Скоро с вами свяжется менеджер')
 
-    handleResetCartState()
-
-    setIsSubmitting(false)
-    handleClose()
+      handleResetCartState()
+      handleClose()
+    } catch {
+      toast.error('Не удалось отправить заказ. Попробуйте ещё раз')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleChange = (field: keyof OrderFormData, value: string) => {
