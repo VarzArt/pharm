@@ -22,6 +22,7 @@ export type Product = {
   id: string
   slug: string
   title: string
+  ruTitle: string
   subtitle: string
   image: string
   categories: ProductCategory[]

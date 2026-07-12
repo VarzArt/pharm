@@ -74,6 +74,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
       <div className={styles.card__body}>
         <div>
           <h3>{product.title}</h3>
+          <span className={styles.card__body_subtitle}>{product.ruTitle}</span>
           <span>{activeVariant.dosage}</span>
         </div>
 
