@@ -172,7 +172,7 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
             <div className={styles.modal__head}>
               <div>
                 <h2>{currentProduct.title}</h2>
-                <p>{currentProduct.subtitle}</p>
+                <p>{currentProduct.ruTitle}</p>
                 {currentProduct.variants.length > 1 && (
                   <div className={styles.modal__variants}>
                     {currentProduct.variants.map((variant) => (
