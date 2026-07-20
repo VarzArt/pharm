@@ -33,6 +33,9 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     socialLink: '',
   })
 
+  const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false)
+  const [isOfferAccepted, setIsOfferAccepted] = useState(false)
+
   const handleClose = () => {
     setIsClosing(true)
 
@@ -106,6 +109,15 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     return sum + item.quantity
   }, 0)
 
+  const phoneDigits = formData.phone.replace(/\D/g, '')
+
+  const isNameValid = formData.name.trim().length >= 2
+  const isPhoneValid = phoneDigits.length === 11 && phoneDigits.startsWith('7')
+  const isSocialLinkValid = formData.socialLink.trim().length > 0
+
+  const isFormValid =
+    isNameValid && isPhoneValid && isSocialLinkValid && isPrivacyAccepted && isOfferAccepted
+
   const handleApplyPromo = () => {
     const normalizedPromoValue = promoValue.trim().toUpperCase()
 
@@ -132,17 +144,21 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     clearCart()
     setPromoValue('')
     setAppliedPromo(null)
+
     setFormData({
       name: '',
       phone: '',
       socialLink: '',
     })
+
+    setIsPrivacyAccepted(false)
+    setIsOfferAccepted(false)
   }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    if (isSubmitting) return
+    if (isSubmitting || !isFormValid) return
 
     setIsSubmitting(true)
 
@@ -416,37 +432,100 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
 
                 <label>
                   <span>Имя*</span>
+
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(event) => handleChange('name', event.target.value)}
                     placeholder="Ваше имя"
                     required
+                    minLength={2}
+                    autoComplete="name"
                   />
                 </label>
 
                 <label>
                   <span>Номер телефона*</span>
+
                   <input
                     type="tel"
                     value={formData.phone}
                     onChange={(event) => handleChange('phone', formatPhone(event.target.value))}
                     placeholder="+7 (999) 999-99-99"
                     required
+                    autoComplete="tel"
                   />
                 </label>
 
                 <label>
-                  <span>Никнейм в телеграм</span>
+                  <span>Никнейм в Telegram*</span>
+
                   <input
                     type="text"
                     value={formData.socialLink}
                     onChange={(event) => handleChange('socialLink', event.target.value)}
                     placeholder="@username"
+                    required
+                    autoComplete="off"
                   />
+                  <p>*Обязателен для связи менеджеру!</p>
                 </label>
 
-                <button className={styles.cart__submit} type="submit" disabled={isSubmitting}>
+                <div className={styles.cart__agreements}>
+                  <label className={styles.cart__agreement}>
+                    <input
+                      type="checkbox"
+                      checked={isPrivacyAccepted}
+                      onChange={(event) => setIsPrivacyAccepted(event.target.checked)}
+                      required
+                    />
+
+                    <span className={styles.cart__checkbox} aria-hidden="true" />
+
+                    <span className={styles.cart__agreementText}>
+                      Я даю согласие на обработку персональных данных и принимаю условия{' '}
+                      <a
+                        href="/data/PrivacyPolicy.docx"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(event) => event.stopPropagation()}
+                      >
+                        политики конфиденциальности
+                      </a>
+                      .
+                    </span>
+                  </label>
+
+                  <label className={styles.cart__agreement}>
+                    <input
+                      type="checkbox"
+                      checked={isOfferAccepted}
+                      onChange={(event) => setIsOfferAccepted(event.target.checked)}
+                      required
+                    />
+
+                    <span className={styles.cart__checkbox} aria-hidden="true" />
+
+                    <span className={styles.cart__agreementText}>
+                      Я ознакомился и принимаю условия{' '}
+                      <a
+                        href="/data/PublicOffer.docx"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(event) => event.stopPropagation()}
+                      >
+                        публичной оферты
+                      </a>
+                      .
+                    </span>
+                  </label>
+                </div>
+
+                <button
+                  className={styles.cart__submit}
+                  type="submit"
+                  disabled={isSubmitting || !isFormValid}
+                >
                   {isSubmitting ? <span className={styles.cart__submitLoader} /> : 'Оформить заказ'}
                 </button>
               </form>

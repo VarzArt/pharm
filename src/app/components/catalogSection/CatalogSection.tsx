@@ -14,6 +14,17 @@ export default function CatalogPage() {
   const [activeCategories, setActiveCategories] = useState<ProductCategory[]>([])
   const [visibleCount, setVisibleCount] = useState(INITIAL_LIMIT)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null)
+
+  const handleOpenProduct = (product: Product, variantId: string) => {
+    setSelectedProduct(product)
+    setSelectedVariantId(variantId)
+  }
+
+  const handleCloseProduct = () => {
+    setSelectedProduct(null)
+    setSelectedVariantId(null)
+  }
 
   const filteredProducts = useMemo(() => {
     if (activeCategories.length === 0) return products
@@ -80,7 +91,7 @@ export default function CatalogPage() {
           {visibleProducts.length > 0 ? (
             <section className={styles.catalog__grid}>
               {visibleProducts.map((product) => (
-                <ProductCard key={product.id} product={product} onClick={setSelectedProduct} />
+                <ProductCard key={product.id} product={product} onClick={handleOpenProduct} />
               ))}
             </section>
           ) : (
@@ -102,7 +113,11 @@ export default function CatalogPage() {
         </div>
       </main>
 
-      <ProductDetailModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+      <ProductDetailModal
+        product={selectedProduct}
+        initialVariantId={selectedVariantId}
+        onClose={handleCloseProduct}
+      />
     </>
   )
 }
