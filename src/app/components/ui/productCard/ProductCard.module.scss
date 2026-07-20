@@ -241,3 +241,141 @@
     background: #626262;
   }
 }
+
+.card {
+  &__variants {
+    width: fit-content;
+    max-width: 100%;
+    margin-top: 12px;
+    padding: 4px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    border: 1px solid rgba(95, 95, 95, 0.1);
+    border-radius: 999px;
+
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.26)),
+      rgba(239, 239, 237, 0.64);
+
+    box-shadow:
+      0 10px 24px rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.84);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__variant,
+  &__variantActive {
+    position: relative;
+    isolation: isolate;
+
+    flex-shrink: 0;
+
+    min-height: 32px;
+    padding: 0 12px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 999px;
+
+    font-family: var(--font-main), sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      background 0.28s ease,
+      color 0.28s ease,
+      border-color 0.28s ease,
+      box-shadow 0.28s ease,
+      opacity 0.28s ease;
+
+    &:active {
+      transform: scale(0.96);
+    }
+  }
+
+  &__variant {
+    border: 1px solid transparent;
+    background: transparent;
+    color: #8a8a8a;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        color: #555555;
+        background: rgba(255, 255, 255, 0.52);
+      }
+    }
+  }
+
+  &__variantActive {
+    border: 1px solid rgba(255, 255, 255, 0.34);
+
+    background: linear-gradient(145deg, rgba(111, 111, 111, 0.98), rgba(79, 79, 79, 0.98));
+
+    color: #f8f8f6;
+
+    box-shadow:
+      0 8px 18px rgba(0, 0, 0, 0.13),
+      0 2px 6px rgba(0, 0, 0, 0.07),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        transform: translateY(-1px);
+
+        background: linear-gradient(145deg, rgba(101, 101, 101, 1), rgba(70, 70, 70, 1));
+
+        box-shadow:
+          0 11px 22px rgba(0, 0, 0, 0.16),
+          0 3px 8px rgba(0, 0, 0, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.22);
+      }
+    }
+  }
+
+  &__dosage {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-height: 32px;
+    margin-top: 12px;
+    padding: 0 13px;
+
+    border: 1px solid rgba(95, 95, 95, 0.1);
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.42);
+    color: #626262;
+
+    font-family: var(--font-main), sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.035em;
+
+    box-shadow:
+      0 8px 18px rgba(0, 0, 0, 0.035),
+      inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  }
+}

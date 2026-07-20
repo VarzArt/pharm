@@ -73,10 +73,6 @@ export default function Footer() {
                 <li>
                   <button onClick={() => handleNavigate('benefits')}>Почему мы</button>
                 </li>
-
-                <li>
-                  <button onClick={() => handleNavigate('contacts')}>Контакты</button>
-                </li>
               </ul>
             </nav>
 
@@ -103,8 +99,13 @@ export default function Footer() {
 
         <div className={styles.footer__law}>
           <div className={styles.footer__law_docs}>
-            <a href={'/data/PublicOffer.docx'}>Публичная оферта</a>
-            <a href={'/data/PrivacyPolicy.docx'}>Политика конфиденциальности</a>
+            <div>
+              <a href={'/data/PublicOffer.docx'}>Публичная оферта</a>
+              <a href={'/data/PrivacyPolicy.docx'}>Политика конфиденциальности</a>
+            </div>
+            <div>
+              <a href={'/data/Delivery.docx'}>Доставка и оплата</a>
+            </div>
           </div>
           <div className={styles.footer__law_info}>
             ИНН: 780452496539 <br></br>

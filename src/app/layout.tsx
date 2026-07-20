@@ -13,8 +13,40 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'App',
-  description: 'Next starter',
+  metadataBase: new URL('https://xymera.com'),
+
+  title: 'XYMERA',
+
+  description: 'Премиальные биологически активные добавки нового поколения.',
+
+  openGraph: {
+    title: 'XYMERA',
+    description: 'Премиальные биологически активные добавки нового поколения.',
+    url: 'https://xymerapeptides.com',
+    siteName: 'XYMERA',
+    images: [
+      {
+        url: '/images/logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'XYMERA',
+      },
+    ],
+    locale: 'ru_RU',
+    type: 'website',
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'XYMERA',
+    description: 'Премиальные биологически активные добавки нового поколения.',
+    images: ['/images/logo.png'],
+  },
+
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {

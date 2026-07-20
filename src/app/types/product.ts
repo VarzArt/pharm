@@ -29,6 +29,9 @@ export type Product = {
   isAvailable: boolean
   description: string
   mainEffects: string[]
+  dontRecomend?: string[]
+  warning?: string[]
+  danger?: string[]
   composition?: string[]
   relatedProductIds: string[]
   variants: ProductVariant[]

@@ -12,12 +12,17 @@ import styles from './ProductDetailsModal.module.scss'
 
 type ProductDetailModalProps = {
   product: Product | null
+  initialVariantId?: string | null
   onClose: () => void
 }
 
 const ANIMATION_DURATION = 320
 
-export default function ProductDetailModal({ product, onClose }: ProductDetailModalProps) {
+export default function ProductDetailModal({
+  product,
+  onClose,
+  initialVariantId,
+}: ProductDetailModalProps) {
   const [isMounted, setIsMounted] = useState(Boolean(product))
   const [isClosing, setIsClosing] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
@@ -76,14 +81,20 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
   }
 
   useEffect(() => {
-    if (product) {
-      setIsMounted(true)
-      setIsClosing(false)
-      setCurrentProduct(product)
-      setHistory([])
-      setSelectedVariantId(product.variants[0]?.id ?? null)
-    }
-  }, [product])
+    if (!product) return
+
+    const initialVariantExists = product.variants.some((variant) => variant.id === initialVariantId)
+
+    const nextVariantId = initialVariantExists
+      ? initialVariantId
+      : (product.variants[0]?.id ?? null)
+
+    setIsMounted(true)
+    setIsClosing(false)
+    setCurrentProduct(product)
+    setHistory([])
+    setSelectedVariantId(nextVariantId as string)
+  }, [product, initialVariantId])
 
   useEffect(() => {
     if (!isMounted) return
@@ -242,6 +253,43 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
                   ))}
                 </ul>
               </div>
+
+              {Array.isArray(currentProduct.dontRecomend) &&
+                currentProduct.dontRecomend.length > 0 && (
+                  <div>
+                    <h3>Не рекомендуется применять при:</h3>
+
+                    <ul>
+                      {currentProduct.dontRecomend.map((effect) => (
+                        <li key={effect}>{effect}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+              {Array.isArray(currentProduct.warning) && currentProduct.warning.length > 0 && (
+                <div>
+                  <h3>С осторожностью применять при:</h3>
+
+                  <ul>
+                    {currentProduct.warning.map((effect) => (
+                      <li key={effect}>{effect}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {Array.isArray(currentProduct.danger) && currentProduct.danger.length > 0 && (
+                <div>
+                  <h3>Противопоказан при:</h3>
+
+                  <ul>
+                    {currentProduct.danger.map((effect) => (
+                      <li key={effect}>{effect}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {!!currentProduct.composition?.length && (
                 <div>
