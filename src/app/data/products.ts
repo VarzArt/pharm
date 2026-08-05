@@ -13,6 +13,7 @@ export const promoCodes = [
   { code: 'Somova', discountPercent: 10 },
   { code: 'Lerafit', discountPercent: 10 },
   { code: 'Solofit', discountPercent: 10 },
+  { code: 'Akela', discountPercent: 10 },
 ]
 
 export const products: Product[] = [
