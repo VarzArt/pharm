@@ -163,7 +163,10 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     setIsSubmitting(true)
 
     const order = {
-      customer: formData,
+      customer: {
+        ...formData,
+        socialLink: `@${formData.socialLink}`,
+      },
       discounts: {
         promo: appliedPromo
           ? {
@@ -463,9 +466,12 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                   <input
                     type="text"
                     value={formData.socialLink}
-                    onChange={(event) => handleChange('socialLink', event.target.value)}
-                    placeholder="@username"
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/^@+/, '')
+                      handleChange('socialLink', value)
+                    }}
                     required
+                    placeholder="username"
                     autoComplete="off"
                   />
                   <p>*Обязателен для связи менеджеру!</p>
