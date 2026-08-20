@@ -63,7 +63,6 @@
 
   &__chips {
     width: 100%;
-    margin-top: 30px;
     padding-bottom: 4px;
 
     display: flex;
@@ -353,10 +352,6 @@
       font-size: 14px;
     }
 
-    &__chips {
-      margin-top: 34px;
-    }
-
     &__grid {
       margin-top: 32px;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -384,5 +379,27 @@
     &__inner {
       max-width: 1680px;
     }
+  }
+}
+
+.catalog {
+  &__filters {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 18px;
+  }
+
+  &__filterGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__filterLabel {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: rgba(74, 74, 74, 0.58);
   }
 }
