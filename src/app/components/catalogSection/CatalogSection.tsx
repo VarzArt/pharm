@@ -1,8 +1,8 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { products, productCategories } from '@/app/data/products'
-import type { Product, ProductCategory } from '@/app/types/product'
+import { products, productCategories, productTypes, productKinds } from '@/app/data/products'
+import type { Product, ProductCategory, ProductKind, ProductType } from '@/app/types/product'
 import styles from './CatalogSection.module.scss'
 import ProductCard from '@/app/components/ui/productCard/ProductCard'
 import ProductDetailModal from '@/app/components/ui/productDetailsModal'
@@ -12,7 +12,12 @@ const LOAD_MORE_STEP = 3
 
 export default function CatalogPage() {
   const [activeCategories, setActiveCategories] = useState<ProductCategory[]>([])
+  const [activeTypes, setActiveTypes] = useState<ProductType[]>([])
+
+  const [activeKind, setActiveKind] = useState<'all' | ProductKind>('all')
+
   const [visibleCount, setVisibleCount] = useState(INITIAL_LIMIT)
+
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null)
 
@@ -27,12 +32,19 @@ export default function CatalogPage() {
   }
 
   const filteredProducts = useMemo(() => {
-    if (activeCategories.length === 0) return products
+    return products.filter((product) => {
+      const matchesCategories =
+        activeCategories.length === 0 ||
+        activeCategories.every((category) => product.categories.includes(category))
 
-    return products.filter((product) =>
-      product.categories.some((category) => activeCategories.includes(category)),
-    )
-  }, [activeCategories])
+      const matchesTypes =
+        activeTypes.length === 0 ||
+        activeTypes.some((type) => product.variants.some((variant) => variant.type === type))
+      const matchesKind = activeKind === 'all' || product.kind === activeKind
+
+      return matchesCategories && matchesTypes && matchesKind
+    })
+  }, [activeCategories, activeTypes, activeKind])
 
   const visibleProducts = filteredProducts.slice(0, visibleCount)
 
@@ -53,6 +65,28 @@ export default function CatalogPage() {
     })
   }
 
+  const handleTypeChange = (typeId: 'all' | ProductType) => {
+    setVisibleCount(INITIAL_LIMIT)
+
+    if (typeId === 'all') {
+      setActiveTypes([])
+      return
+    }
+
+    setActiveTypes((prev) => {
+      if (prev.includes(typeId)) {
+        return prev.filter((type) => type !== typeId)
+      }
+
+      return [...prev, typeId]
+    })
+  }
+
+  const handleKindChange = (kindId: 'all' | ProductKind) => {
+    setVisibleCount(INITIAL_LIMIT)
+    setActiveKind(kindId)
+  }
+
   const remainingCount = filteredProducts.length - visibleProducts.length
 
   return (
@@ -62,30 +96,80 @@ export default function CatalogPage() {
           <div className={styles.catalog__head}>
             <div>
               <p className={styles.catalog__label}>Каталог</p>
+
               <h1 className={styles.catalog__title}>Наша продукция</h1>
             </div>
 
             <span className={styles.catalog__count}>{filteredProducts.length} продуктов</span>
           </div>
 
-          <div className={styles.catalog__chips}>
-            {productCategories.map((category) => {
-              const isActive =
-                category.id === 'all'
-                  ? activeCategories.length === 0
-                  : activeCategories.includes(category.id)
+          <div className={styles.catalog__filters}>
+            <div className={styles.catalog__filterGroup}>
+              <span className={styles.catalog__filterLabel}>Форма выпуска</span>
 
-              return (
-                <button
-                  key={category.id}
-                  type="button"
-                  className={isActive ? styles.catalog__chipActive : styles.catalog__chip}
-                  onClick={() => handleCategoryChange(category.id)}
-                >
-                  {category.label}
-                </button>
-              )
-            })}
+              <div className={styles.catalog__chips}>
+                {productTypes.map((type) => {
+                  const isActive =
+                    type.id === 'all' ? activeTypes.length === 0 : activeTypes.includes(type.id)
+
+                  return (
+                    <button
+                      key={type.id}
+                      type="button"
+                      className={isActive ? styles.catalog__chipActive : styles.catalog__chip}
+                      onClick={() => handleTypeChange(type.id)}
+                    >
+                      {type.label}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            <div className={styles.catalog__filterGroup}>
+              <span className={styles.catalog__filterLabel}>Тип продукта</span>
+
+              <div className={styles.catalog__chips}>
+                {productKinds.map((kind) => {
+                  const isActive = activeKind === kind.id
+
+                  return (
+                    <button
+                      key={kind.id}
+                      type="button"
+                      className={isActive ? styles.catalog__chipActive : styles.catalog__chip}
+                      onClick={() => handleKindChange(kind.id)}
+                    >
+                      {kind.label}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            <div className={styles.catalog__filterGroup}>
+              <span className={styles.catalog__filterLabel}>Направление</span>
+
+              <div className={styles.catalog__chips}>
+                {productCategories.map((category) => {
+                  const isActive =
+                    category.id === 'all'
+                      ? activeCategories.length === 0
+                      : activeCategories.includes(category.id)
+
+                  return (
+                    <button
+                      key={category.id}
+                      type="button"
+                      className={isActive ? styles.catalog__chipActive : styles.catalog__chip}
+                      onClick={() => handleCategoryChange(category.id)}
+                    >
+                      {category.label}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
           </div>
 
           {visibleProducts.length > 0 ? (
@@ -97,7 +181,8 @@ export default function CatalogPage() {
           ) : (
             <div className={styles.catalog__empty}>
               <h3>Товары не найдены</h3>
-              <p>Нет препаратов, которые подходят под выбранные категории.</p>
+
+              <p>Нет препаратов, которые подходят под выбранные параметры.</p>
             </div>
           )}
 
