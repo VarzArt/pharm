@@ -32,12 +32,10 @@ export default function CatalogPage() {
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
-      // Все выбранные направления должны присутствовать у продукта
       const matchesCategories =
         activeCategories.length === 0 ||
-        activeCategories.every((category) => product.categories.includes(category))
+        activeCategories.some((category) => product.categories.includes(category))
 
-      // Форма выпуска — одиночный фильтр
       const matchesType =
         activeType === 'all' || product.variants.some((variant) => variant.type === activeType)
 
