@@ -1,8 +1,8 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { products, productCategories, productTypes, productKinds } from '@/app/data/products'
-import type { Product, ProductCategory, ProductKind, ProductType } from '@/app/types/product'
+import { products, productCategories, productTypes } from '@/app/data/products'
+import type { Product, ProductCategory, ProductType } from '@/app/types/product'
 import styles from './CatalogSection.module.scss'
 import ProductCard from '@/app/components/ui/productCard/ProductCard'
 import ProductDetailModal from '@/app/components/ui/productDetailsModal'
@@ -12,9 +12,8 @@ const LOAD_MORE_STEP = 3
 
 export default function CatalogPage() {
   const [activeCategories, setActiveCategories] = useState<ProductCategory[]>([])
-  const [activeTypes, setActiveTypes] = useState<ProductType[]>([])
 
-  const [activeKind, setActiveKind] = useState<'all' | ProductKind>('all')
+  const [activeType, setActiveType] = useState<'all' | ProductType>('all')
 
   const [visibleCount, setVisibleCount] = useState(INITIAL_LIMIT)
 
@@ -33,18 +32,18 @@ export default function CatalogPage() {
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
+      // Все выбранные направления должны присутствовать у продукта
       const matchesCategories =
         activeCategories.length === 0 ||
         activeCategories.every((category) => product.categories.includes(category))
 
-      const matchesTypes =
-        activeTypes.length === 0 ||
-        activeTypes.some((type) => product.variants.some((variant) => variant.type === type))
-      const matchesKind = activeKind === 'all' || product.kind === activeKind
+      // Форма выпуска — одиночный фильтр
+      const matchesType =
+        activeType === 'all' || product.variants.some((variant) => variant.type === activeType)
 
-      return matchesCategories && matchesTypes && matchesKind
+      return matchesCategories && matchesType
     })
-  }, [activeCategories, activeTypes, activeKind])
+  }, [activeCategories, activeType])
 
   const visibleProducts = filteredProducts.slice(0, visibleCount)
 
@@ -67,24 +66,7 @@ export default function CatalogPage() {
 
   const handleTypeChange = (typeId: 'all' | ProductType) => {
     setVisibleCount(INITIAL_LIMIT)
-
-    if (typeId === 'all') {
-      setActiveTypes([])
-      return
-    }
-
-    setActiveTypes((prev) => {
-      if (prev.includes(typeId)) {
-        return prev.filter((type) => type !== typeId)
-      }
-
-      return [...prev, typeId]
-    })
-  }
-
-  const handleKindChange = (kindId: 'all' | ProductKind) => {
-    setVisibleCount(INITIAL_LIMIT)
-    setActiveKind(kindId)
+    setActiveType(typeId)
   }
 
   const remainingCount = filteredProducts.length - visibleProducts.length
@@ -109,8 +91,7 @@ export default function CatalogPage() {
 
               <div className={styles.catalog__chips}>
                 {productTypes.map((type) => {
-                  const isActive =
-                    type.id === 'all' ? activeTypes.length === 0 : activeTypes.includes(type.id)
+                  const isActive = activeType === type.id
 
                   return (
                     <button
@@ -120,27 +101,6 @@ export default function CatalogPage() {
                       onClick={() => handleTypeChange(type.id)}
                     >
                       {type.label}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            <div className={styles.catalog__filterGroup}>
-              <span className={styles.catalog__filterLabel}>Тип продукта</span>
-
-              <div className={styles.catalog__chips}>
-                {productKinds.map((kind) => {
-                  const isActive = activeKind === kind.id
-
-                  return (
-                    <button
-                      key={kind.id}
-                      type="button"
-                      className={isActive ? styles.catalog__chipActive : styles.catalog__chip}
-                      onClick={() => handleKindChange(kind.id)}
-                    >
-                      {kind.label}
                     </button>
                   )
                 })}
@@ -175,7 +135,12 @@ export default function CatalogPage() {
           {visibleProducts.length > 0 ? (
             <section className={styles.catalog__grid}>
               {visibleProducts.map((product) => (
-                <ProductCard key={product.id} product={product} onClick={handleOpenProduct} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  activeType={activeType}
+                  onClick={handleOpenProduct}
+                />
               ))}
             </section>
           ) : (
