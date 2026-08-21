@@ -1,17 +1,31 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
-import type { Product } from '@/app/types/product'
+import { useEffect, useState } from 'react'
+import type { Product, ProductType } from '@/app/types/product'
 import styles from './ProductCard.module.scss'
 
 type ProductCardProps = {
   product: Product
+  activeType: 'all' | ProductType
   onClick: (product: Product, variantId: string) => void
 }
 
-export default function ProductCard({ product, onClick }: ProductCardProps) {
+export default function ProductCard({ product, activeType, onClick }: ProductCardProps) {
   const [activeVariantIndex, setActiveVariantIndex] = useState(0)
+
+  useEffect(() => {
+    if (activeType === 'all') {
+      setActiveVariantIndex(0)
+      return
+    }
+
+    const variantIndex = product.variants.findIndex((variant) => variant.type === activeType)
+
+    if (variantIndex !== -1) {
+      setActiveVariantIndex(variantIndex)
+    }
+  }, [activeType, product.variants])
 
   const activeVariant = product.variants[activeVariantIndex]
   const hasSeveralVariants = product.variants.length > 1
