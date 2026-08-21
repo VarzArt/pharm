@@ -104,7 +104,7 @@ export const products: Product[] = [
       {
         id: 'spray',
         label: 'spray',
-        dosage: '10mg/spray',
+        dosage: '10mg/10ml',
         price: 2700,
         image: '/peptides/MelanotanSpray.jpg',
         type: 'spray',
@@ -154,8 +154,8 @@ export const products: Product[] = [
       },
       {
         id: 'mots-c-50mg',
-        label: '50mg/3ml',
-        dosage: '50mg/stick',
+        label: '50mg/1 pen',
+        dosage: '50mg/1 pen',
         price: 18000,
         image: '/peptides/motsCPEN.jpeg',
         type: 'stick',
@@ -283,8 +283,8 @@ export const products: Product[] = [
       },
       {
         id: 'retatrutide-30mg',
-        label: '30mg/3ml',
-        dosage: '30mg/stick',
+        label: '30mg/1 pen',
+        dosage: '30mg/1 pen',
         price: 21000,
         image: '/peptides/retatrutidePEN.jpeg',
         type: 'stick',
@@ -331,8 +331,8 @@ export const products: Product[] = [
       // },
       {
         id: 'glow-66mg',
-        label: '66mg/3ml',
-        dosage: '66mg/stick',
+        label: '66mg/1 pen',
+        dosage: '66mg/1 pen',
         price: 14000,
         type: 'stick',
       },
@@ -515,8 +515,8 @@ export const products: Product[] = [
       },
       {
         id: 'ghk-cupr-100mg/3ml',
-        label: '100mg/3ml',
-        dosage: '100mg/stick',
+        label: '100mg/1 pen',
+        dosage: '100mg/1 pen',
         price: 8000,
         image: '/peptides/ghkCUPPEN.jpeg',
         type: 'stick',
@@ -651,8 +651,8 @@ export const products: Product[] = [
       },
       {
         id: 'mix-mots-c-ss-31-spray',
-        label: '10mg+10mg/1spray',
-        dosage: '10mg+10mg/spray',
+        label: '10mg+10mg/10ml',
+        dosage: '10mg+10mg/10ml',
         price: 5000,
         image: '/peptides/mixMOTSCCSpray.jpg',
         type: 'spray',
@@ -781,8 +781,8 @@ export const products: Product[] = [
     variants: [
       {
         id: 'selank-spray',
-        label: '20mg/1spray',
-        dosage: '20mg/spray',
+        label: '20mg/10ml',
+        dosage: '20mg/10ml',
         price: 3000,
         image: '/peptides/selank.jpg',
         type: 'spray',
@@ -824,8 +824,8 @@ export const products: Product[] = [
     variants: [
       {
         id: 'dsip-spray',
-        label: '32mg/1spray',
-        dosage: '32mg/spray',
+        label: '32mg/10ml',
+        dosage: '32mg/10ml',
         price: 4500,
         image: '/peptides/DSIP.jpg',
         type: 'spray',
@@ -860,8 +860,8 @@ export const products: Product[] = [
     variants: [
       {
         id: 'matrixyl-3000-spray',
-        label: '20mg/1spray',
-        dosage: '20mg/spray',
+        label: '20mg/10ml',
+        dosage: '20mg/10ml',
         price: 4500,
         image: '/peptides/Matrixyl.jpg',
         type: 'spray',
