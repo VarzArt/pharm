@@ -60,6 +60,8 @@ export const promoCodes = [
   { code: 'Akella', discountPercent: 10 },
   { code: 'King', discountPercent: 10 },
   { code: 'SHSAM', discountPercent: 10 },
+  { code: 'ALEXFIT', discountPercent: 10 },
+  { code: 'Chef', discountPercent: 10 },
 ]
 
 export const products: Product[] = [
@@ -158,7 +160,7 @@ export const products: Product[] = [
         id: 'mots-c-50mg',
         label: '50mg/1 pen',
         dosage: '50mg/1 pen',
-        price: 18000,
+        price: 14500,
         image: '/peptides/motsCPEN.jpeg',
         type: 'stick',
       },
@@ -333,8 +335,8 @@ export const products: Product[] = [
       // },
       {
         id: 'glow-66mg',
-        label: '66mg/1 pen',
-        dosage: '66mg/1 pen',
+        label: '44mg + 11mg + 11mg/1 pen',
+        dosage: '44mg + 11mg + 11mg/1 pen',
         price: 14000,
         type: 'stick',
       },
